@@ -51,20 +51,88 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Música de fondo (solo tras abrir el sobre)
+  // Música de fondo (solo tras abrir el sobre) + botón flotante silenciar/activar
   const invitationMusic = document.getElementById('invitationMusic');
+  const soundToggle = document.getElementById('soundToggle');
   const INVITATION_MUSIC_FILE = 'Ed Sheeran, Perfect Symphony ft. Andrea Bocelli (lyrics & translate).mp3';
   let invitationMusicStarted = false;
+  let invitationMusicMuted = false;
 
   if (invitationMusic) {
     invitationMusic.src = `assets/${encodeURIComponent(INVITATION_MUSIC_FILE)}`;
   }
 
+  function renderSoundToggleIcon() {
+    if (!soundToggle || typeof lucide === 'undefined' || !lucide.createIcons) return;
+
+    const iconName = invitationMusicMuted ? 'volume-x' : 'volume-2';
+    soundToggle.innerHTML = '';
+
+    const iconEl = document.createElement('i');
+    iconEl.className = 'sound-toggle__icon';
+    iconEl.id = 'soundToggleIcon';
+    iconEl.setAttribute('data-lucide', iconName);
+    iconEl.setAttribute('aria-hidden', 'true');
+    soundToggle.appendChild(iconEl);
+
+    lucide.createIcons({
+      root: soundToggle,
+      attrs: {
+        'stroke-width': 1.75,
+        width: 22,
+        height: 22,
+      },
+    });
+  }
+
+  function updateSoundToggleUi() {
+    if (!soundToggle) return;
+    soundToggle.classList.toggle('is-muted', invitationMusicMuted);
+    soundToggle.setAttribute('aria-pressed', invitationMusicMuted ? 'true' : 'false');
+    soundToggle.setAttribute(
+      'aria-label',
+      invitationMusicMuted ? 'Activar música' : 'Silenciar música'
+    );
+    soundToggle.setAttribute(
+      'title',
+      invitationMusicMuted ? 'Activar música' : 'Silenciar música'
+    );
+    renderSoundToggleIcon();
+  }
+
+  function pauseInvitationMusic() {
+    if (!invitationMusic) return;
+    invitationMusic.pause();
+  }
+
   function startInvitationMusic() {
-    if (!invitationMusic || invitationMusicStarted) return;
+    if (!invitationMusic || invitationMusicMuted) return;
     invitationMusicStarted = true;
     invitationMusic.play().catch(() => {
       invitationMusicStarted = false;
+    });
+  }
+
+  function resumeInvitationMusicIfAllowed() {
+    if (!invitationMusic || invitationMusicMuted) return;
+    invitationMusicStarted = true;
+    invitationMusic.play().catch(() => {
+      invitationMusicStarted = false;
+    });
+  }
+
+  if (soundToggle) {
+    updateSoundToggleUi();
+    soundToggle.addEventListener('click', () => {
+      invitationMusicMuted = !invitationMusicMuted;
+      updateSoundToggleUi();
+      if (invitationMusicMuted) {
+        pauseInvitationMusic();
+        return;
+      }
+      if (invitationMain?.classList.contains('opened')) {
+        resumeInvitationMusicIfAllowed();
+      }
     });
   }
 
@@ -853,8 +921,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstName = payload.nombre.split(/\s+/)[0] || '';
         setRsvpMessage(
           firstName
-            ? `¡Gracias, ${firstName}! Hemos recibido tu confirmación. Nos vemos el 15 de agosto.`
-            : '¡Gracias! Hemos recibido tu confirmación. Nos vemos el 15 de agosto.',
+            ? `¡Gracias ${firstName} por ayudarnos a organizarnos!`
+            : '¡Gracias por ayudarnos a organizarnos!',
           'is-success'
         );
         rsvpForm.classList.add('is-submitted');

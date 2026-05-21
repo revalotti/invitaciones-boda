@@ -629,6 +629,73 @@ body {
   pointer-events: none;
 }
 
+/* Botón flotante — música on/off (solo dentro de la invitación, no en el sobre) */
+.sound-toggle {
+  position: fixed;
+  top: max(0.75rem, env(safe-area-inset-top, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  z-index: 10050;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid rgba(61, 61, 61, 0.14);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-charcoal);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.4s ease 0.2s,
+    visibility 0.4s ease 0.2s,
+    transform 0.4s ease 0.2s,
+    background var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
+}
+
+.invitation-main.opened ~ .sound-toggle {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.sound-toggle:hover {
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+  transform: translateY(-1px);
+}
+
+.sound-toggle:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px rgba(199, 110, 78, 0.55),
+    0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+.sound-toggle__icon,
+.sound-toggle svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  stroke-width: 1.75;
+  flex-shrink: 0;
+}
+
+.sound-toggle.is-muted {
+  color: var(--color-text-light);
+  background: rgba(246, 245, 243, 0.95);
+}
+
 .invitation-main {
   position: relative;
   z-index: 1;
