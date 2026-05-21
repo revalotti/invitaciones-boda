@@ -2,391 +2,139 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Javi & Ani — Invitación de Boda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Creo invitaciones digitales elegantes para bodas. Diseño personalizado, confirmación de asistencia online y enlace fácil para compartir.">
+  <title>Invitaciones Boda — Invitaciones digitales para tu boda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Letter Overlay - First view (full page envelope) -->
-  <div
-    class="letter-overlay"
-    id="letterOverlay"
-    role="button"
-    tabindex="0"
-    aria-label="Toca la carta para abrir la invitación"
-  >
-    <div class="letter-envelope-full">
-      <div class="letter-photo-stage">
-        <div class="letter-intro-layout">
-          <div class="letter-message">
-            <p class="letter-message__title">¡NOS CASAMOS!</p>
-            <p class="letter-message__subtitle">Esta invitación es exclusiva <em>para ti</em></p>
-          </div>
-          <div class="letter-intro-visual">
-            <div class="letter-video-wrap" id="letterVideoWrap">
-              <video
-                id="letterEnvelopeVideo"
-                class="letter-envelope-video"
-                playsinline
-                muted
-                preload="auto"
-                poster="assets/envelope-intro.png"
-                disablepictureinpicture
-                aria-hidden="true"
-              >
-                <source src="assets/Sobre.mp4" type="video/mp4">
-                <source src="assets/Sobre.mov" type="video/quicktime">
-              </video>
-            </div>
-            <p class="letter-hint">Toca la carta para abrirla</p>
-          </div>
-          <p class="letter-names">
-            <span class="couple-names-brand">
-              <span class="couple-names-brand__part">Javi</span> <span class="couple-names-brand__amp">&amp;</span> <span class="couple-names-brand__part">Ani</span>
-            </span>
-          </p>
-        </div>
-      </div>
-      <div class="letter-fade-white"></div>
-    </div>
-  </div>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
 
-  <!-- Main Invitation (hidden until letter opens) -->
-  <main class="invitation-main" id="invitationMain">
-  <!-- Hero Section -->
-  <header class="hero">
-    <video class="hero-video" id="heroVideo" autoplay muted playsinline data-loop-end="9" poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80">
-      <source src="https://videos.pexels.com/video-files/32019982/13647379_1920_1080_60fps.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <img
-        class="hero-title-img"
-        src="assets/Title.svg"
-        alt="Javi y Ani — 15 de agosto de 2026"
-        width="595"
-        height="842"
-        decoding="async"
-      >
-      <a href="#historia" class="hero-cta-btn" aria-label="Ver invitación">Ver invitación</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="/" class="logo" aria-label="Invitaciones Boda — Inicio">
+        <i data-lucide="heart" class="logo-icon" aria-hidden="true"></i>
+        <span class="logo-text">Invitaciones Boda</span>
+      </a>
+      <nav class="header-nav" aria-label="Navegación principal">
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto" class="nav-cta">Contacto</a>
+      </nav>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Abrir menú">
+        <span class="menu-toggle-bar" aria-hidden="true"></span>
+        <span class="menu-toggle-bar" aria-hidden="true"></span>
+      </button>
     </div>
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Menú móvil" hidden>
+      <a href="#servicios">Servicios</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
   </header>
 
-  <!-- Nuestra historia -->
-  <section class="story story--light" id="historia">
-    <div class="section-flowers" aria-hidden="true">
-      <img class="section-flowers__img section-flowers__img--02" src="assets/Flower-02.svg" alt="" width="1000" height="1500" decoding="async">
-      <img class="section-flowers__img section-flowers__img--03" src="assets/Flower-03.svg" alt="" width="1000" height="1500" decoding="async">
-    </div>
-    <div class="container">
-      <h2 class="story-section-heading">
-        &ldquo;El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma direcci&oacute;n.&rdquo;
-      </h2>
-      <div class="story-layout">
-        <figure class="story-person story-person--single">
-          <img src="assets/ani-javi.png" alt="Ani y Javi" class="story-person-img">
-        </figure>
-        <div class="story-center">
-          <p
-            class="story-text"
-            id="storyTextTyped"
-            data-full-text="Después de tantos momentos compartidos, estamos emocionados de dar el siguiente paso rodeados de las personas que más queremos."
-          ></p>
-        </div>
+  <main id="contenido-principal">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-ornament hero-ornament--left"></div>
+        <div class="hero-ornament hero-ornament--right"></div>
       </div>
-    </div>
-  </section>
-
-  <!-- Cuenta atrás (solo texto, terracota) -->
-  <section class="countdown-strip" id="countdownStrip" data-wedding="2026-08-15T18:00:00" aria-labelledby="countdownStripTitle">
-    <div class="container">
-      <h2 class="countdown-strip__title" id="countdownStripTitle">Faltan</h2>
-      <div class="countdown countdown--strip" id="countdown">
-        <span class="countdown-item"><span class="countdown-value" id="countdownDays">0</span><span class="countdown-label">días</span></span>
-        <span class="countdown-item"><span class="countdown-value" id="countdownHours">0</span><span class="countdown-label">horas</span></span>
-        <span class="countdown-item"><span class="countdown-value" id="countdownMinutes">0</span><span class="countdown-label">min</span></span>
-        <span class="countdown-item"><span class="countdown-value" id="countdownSeconds">0</span><span class="countdown-label">seg</span></span>
-      </div>
-      <p class="countdown-fallback" id="countdownFallback" style="display:none;">¡Ya llegó el gran día!</p>
-    </div>
-  </section>
-
-  <!-- Os esperamos + itinerario / ubicaciones -->
-  <section class="venues" id="ubicacion">
-    <div class="container container--wide">
-      <header class="venues__intro">
-        <p class="venues__intro-kicker">Os esperamos el</p>
-        <h2 class="venues__intro-date" id="venuesDateHeading">15 de Agosto de 2026</h2>
-      </header>
-
-      <div class="venues-schedule">
-        <article class="venue-block">
-          <i data-lucide="church" class="venue-icon" aria-hidden="true"></i>
-          <h3 class="venue-title">Ceremonia</h3>
-          <p class="venue-time">18:00h</p>
-          <p class="venue-place">Parroquia de San Juan Bautista</p>
-          <a href="https://maps.app.goo.gl/jrJZDFRAW2FskqKFA" target="_blank" rel="noopener" class="btn-map">
-            Cómo llegar <i data-lucide="arrow-right" class="btn-map-icon"></i>
+      <div class="container hero-inner">
+        <p class="hero-eyebrow reveal">
+          <i data-lucide="sparkles" aria-hidden="true"></i>
+          Invitaciones digitales para bodas
+        </p>
+        <h1 id="hero-title" class="hero-title reveal reveal-delay-1">
+          Creo invitaciones digitales<br>
+          <em>elegantes para tu boda</em>
+        </h1>
+        <p class="hero-subtitle reveal reveal-delay-2">
+          Diseño personalizado, información del evento en un solo enlace
+          y confirmación de asistencia online para que compartáis el gran día con calma.
+        </p>
+        <div class="hero-actions reveal reveal-delay-3">
+          <a href="mailto:heyrevalotti@gmail.com?subject=Invitación%20digital%20para%20mi%20boda" class="btn btn-primary">
+            <i data-lucide="mail" aria-hidden="true"></i>
+            Escríbeme
           </a>
-        </article>
-
-        <article class="venue-block">
-          <i data-lucide="martini" class="venue-icon" aria-hidden="true"></i>
-          <h3 class="venue-title">Celebración</h3>
-          <p class="venue-time">20:30h</p>
-          <p class="venue-place">Pabellón Municipal el Pilar</p>
-          <a href="https://www.google.com/maps/search/Pabell%C3%B3n+Municipal+el+Pilar+Hinojosa+del+Duque" target="_blank" rel="noopener" class="btn-map">
-            Cómo llegar <i data-lucide="arrow-right" class="btn-map-icon"></i>
-          </a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- RSVP -->
-  <section class="rsvp" id="confirmacion">
-    <div class="container">
-      <h2 class="section-title">Confirma tu asistencia</h2>
-      <p class="rsvp-intro">Confírmanos antes del <strong>1 de julio de 2026</strong>. Te llevará menos de un minuto y nos ayuda muchísimo a organizarlo todo.</p>
-    </div>
-  </section>
-
-  <section class="rsvp-form-section" id="confirmacion-formulario" aria-label="Formulario de confirmación">
-    <div class="container">
-      <div class="rsvp-form-reveal" id="rsvpFormReveal">
-        <button type="button" class="btn-primary rsvp-form-reveal__btn" id="rsvpFormRevealBtn">
-          Rellenar formulario
-        </button>
-        <div class="rsvp-form-panel" id="rsvpFormPanel" hidden>
-      <form class="rsvp-form" id="rsvpForm" novalidate>
-        <div class="rsvp-form__block" id="rsvpBlockContact">
-          <h3 class="rsvp-form__block-title">
-            <span class="rsvp-form__block-icon" aria-hidden="true"><i data-lucide="user-round"></i></span>
-            <span class="rsvp-form__block-text">¿Quién confirma?</span>
-          </h3>
-
-          <div class="form-group">
-            <label for="rsvpNombre">Nombre y apellidos <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
-            <div class="input-wrap input-wrap--single">
-              <input type="text" id="rsvpNombre" name="nombre" required autocomplete="name" placeholder="Ej. Ani Murillo">
-            </div>
-          </div>
-
-          <div class="form-group form-group--last">
-            <label for="rsvpEmail">Correo electrónico <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
-            <div class="input-wrap input-wrap--single">
-              <input type="email" id="rsvpEmail" name="email" required autocomplete="email" inputmode="email" placeholder="javier.revaliente@ejemplo.com">
-            </div>
-          </div>
-        </div>
-
-        <div class="rsvp-form__block" id="rsvpBlockAttendance">
-          <h3 class="rsvp-form__block-title">
-            <span class="rsvp-form__block-icon" aria-hidden="true"><i data-lucide="calendar-check"></i></span>
-            <span class="rsvp-form__block-text">¿Nos acompañas el 15 de agosto? <span class="rsvp-required-mark" aria-hidden="true">*</span></span>
-          </h3>
-          <fieldset class="form-group form-group--tight">
-            <legend class="visually-hidden">Confirmación de asistencia</legend>
-            <div class="radio-group radio-group--cards">
-              <label class="radio-option radio-option--card">
-                <input type="radio" name="asistencia" value="si" required>
-                <span class="radio-option__title">¡Sí, allí estaré!</span>
-              </label>
-              <label class="radio-option radio-option--card">
-                <input type="radio" name="asistencia" value="no">
-                <span class="radio-option__title">No podré asistir</span>
-              </label>
-            </div>
-          </fieldset>
-        </div>
-
-        <div class="rsvp-form__block rsvp-form__block--conditional rsvp-reveal" id="rsvpAttendingBlock" hidden>
-          <div class="rsvp-form__subsection rsvp-form__subsection--party">
-            <h3 class="rsvp-form__block-title">
-              <span class="rsvp-form__block-icon" aria-hidden="true"><i data-lucide="users"></i></span>
-              <span class="rsvp-form__block-text">¿Vienes solo o con más personas? <span class="rsvp-required-mark" aria-hidden="true">*</span></span>
-            </h3>
-            <fieldset class="form-group form-group--tight">
-              <legend class="visually-hidden">¿Vienes solo o con más personas?</legend>
-              <div class="radio-group radio-group--inline radio-group--party">
-                <label class="radio-option radio-option--card">
-                  <input type="radio" name="tipo_grupo" value="solo" checked>
-                  <span class="radio-option__title">Voy solo/a</span>
-                </label>
-                <label class="radio-option radio-option--card">
-                  <input type="radio" name="tipo_grupo" value="acompanado">
-                  <span class="radio-option__title">Vamos varios</span>
-                </label>
-              </div>
-            </fieldset>
-
-            <div class="guest-list-panel" id="rsvpGuestListPanel" hidden>
-              <p class="form-hint form-hint--block">Añade a cada persona que venga contigo. Tú ya estás incluido.</p>
-              <div class="guest-table-wrap">
-                <table class="guest-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Nombre</th>
-                      <th scope="col" class="guest-table__th--type">Adulto/Niño</th>
-                      <th scope="col" class="guest-table__th--action"><span class="visually-hidden">Quitar</span></th>
-                    </tr>
-                  </thead>
-                  <tbody id="rsvpGuestList" aria-live="polite"></tbody>
-                  <tfoot>
-                    <tr>
-                      <td colspan="3" class="guest-table__foot">
-                        <button type="button" class="btn-add-guest" id="rsvpAddGuest">
-                          <span class="btn-add-guest__icon" aria-hidden="true">+</span>
-                          <span class="btn-add-guest__label">Añadir persona</span>
-                        </button>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="rsvp-form__subsection">
-            <fieldset class="form-group allergy-field" id="rsvpAllergyField">
-              <legend class="form-legend form-legend--icon">
-                <span class="rsvp-form__block-icon" aria-hidden="true"><i data-lucide="utensils"></i></span>
-                <span class="rsvp-form__block-text">Alergias o intolerancias alimentarias <span class="rsvp-required-mark" aria-hidden="true">*</span></span>
-              </legend>
-              <p class="form-hint form-hint--intro">Marca todo lo que aplique a quien confirma.</p>
-              <div class="checkbox-grid" id="rsvpAllergyOptions">
-                <label class="checkbox-option checkbox-option--tile">
-                  <input type="checkbox" name="alergia_opcion" value="ninguna" id="rsvpAlergiaNinguna">
-                  <span class="checkbox-option__text">No tengo ninguna</span>
-                </label>
-                <label class="checkbox-option checkbox-option--tile">
-                  <input type="checkbox" name="alergia_opcion" value="gluten">
-                  <span class="checkbox-option__text">Celiaquía</span>
-                </label>
-                <label class="checkbox-option checkbox-option--tile">
-                  <input type="checkbox" name="alergia_opcion" value="lactosa">
-                  <span class="checkbox-option__text">Lactosa</span>
-                </label>
-                <label class="checkbox-option checkbox-option--tile">
-                  <input type="checkbox" name="alergia_opcion" value="frutos_secos">
-                  <span class="checkbox-option__text">Frutos secos</span>
-                </label>
-                <label class="checkbox-option checkbox-option--tile">
-                  <input type="checkbox" name="alergia_opcion" value="marisco">
-                  <span class="checkbox-option__text">Marisco</span>
-                </label>
-                <label class="checkbox-option checkbox-option--tile">
-                  <input type="checkbox" name="alergia_opcion" value="huevo">
-                  <span class="checkbox-option__text">Huevo</span>
-                </label>
-                <label class="checkbox-option checkbox-option--tile checkbox-option--mobile-only">
-                  <input type="checkbox" name="alergia_opcion" value="pescado">
-                  <span class="checkbox-option__text">Pescado</span>
-                </label>
-                <div class="allergy-other-tile checkbox-grid__other">
-                  <input
-                    type="text"
-                    class="allergy-other-tile__input"
-                    id="rsvpAlergia"
-                    name="alergia_otra"
-                    placeholder="Otra (especificar)…"
-                    aria-label="Otra alergia o intolerancia (especificar)"
-                    autocomplete="off"
-                  >
-                </div>
-              </div>
-              <input type="text" class="allergy-valid-anchor" id="rsvpAllergyValid" tabindex="-1" aria-hidden="true" value="">
-            </fieldset>
-
-            <div class="form-group form-group--last">
-              <h3 class="rsvp-form__block-title rsvp-form__block-title--compact">
-                <span class="rsvp-form__block-icon" aria-hidden="true"><i data-lucide="music-2"></i></span>
-                <span class="rsvp-form__block-text">¿Qué canción no puede faltar? <span class="form-label-optional">(opcional)</span></span>
-              </h3>
-              <div class="input-wrap input-wrap--single">
-                <input type="text" id="rsvpCancion" name="cancion" placeholder="Artista — canción">
-              </div>
-              <p class="form-hint">Sugerencia para la fiesta; la intentaremos poner.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="rsvp-form__block rsvp-form__block--conditional rsvp-reveal" id="rsvpDeclineBlock" hidden>
-          <p class="rsvp-decline-note">
-            <i data-lucide="heart" aria-hidden="true"></i>
-            <span>Sentimos que no puedas venir. Si quieres, déjanos unas palabras.</span>
-          </p>
-        </div>
-
-        <div class="rsvp-form__block" id="rsvpBlockFinish">
-          <h3 class="rsvp-form__block-title">
-            <span class="rsvp-form__block-icon" aria-hidden="true"><i data-lucide="message-circle-heart"></i></span>
-            <span class="rsvp-form__block-text">Mensaje para Javi y Ani <span class="form-label-optional">(opcional)</span></span>
-          </h3>
-          <div class="form-group form-group--last">
-            <label class="visually-hidden" for="rsvpMensaje">Mensaje para los novios</label>
-            <div class="input-wrap input-wrap--single input-wrap--textarea">
-              <textarea id="rsvpMensaje" name="mensaje" rows="3" maxlength="500" placeholder="Ej. ¡Ani y Javi, no podemos esperar al 15 de agosto!"></textarea>
-            </div>
-            <p class="form-hint"><span id="rsvpMensajeCount">0</span> / 500 caracteres</p>
-          </div>
-        </div>
-
-        <p class="rsvp-form-message" id="rsvpFormMessage" role="status" aria-live="polite" hidden></p>
-
-        <div class="rsvp-form__actions">
-          <button type="submit" class="btn-submit" id="rsvpSubmitBtn">
-            <span class="btn-submit__label">Enviar confirmación</span>
-          </button>
-        </div>
-      </form>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <p class="footer-line">Con amor</p>
-      <p class="footer-line footer-line--names">
-        <span class="couple-names-brand">
-          <span class="couple-names-brand__part">Javi</span> <span class="couple-names-brand__amp">&amp;</span> <span class="couple-names-brand__part">Ani</span>
+    <section id="servicios" class="section services" aria-labelledby="servicios-title">
+      <div class="container">
+        <header class="section-header section-header--center reveal">
+          <p class="section-eyebrow">Qué incluye</p>
+          <h2 id="servicios-title" class="section-title">Todo lo que necesitáis en una invitación</h2>
+        </header>
+        <ul class="services-grid" role="list">
+          <li class="service-card reveal">
+            <span class="service-icon" aria-hidden="true">
+              <i data-lucide="circle-check"></i>
+            </span>
+            <h3 class="service-title">Confirmación online</h3>
+            <p class="service-text">Vuestros invitados confirman asistencia desde el móvil, sin complicaciones.</p>
+          </li>
+          <li class="service-card reveal">
+            <span class="service-icon" aria-hidden="true">
+              <i data-lucide="calendar-heart"></i>
+            </span>
+            <h3 class="service-title">Info del evento</h3>
+            <p class="service-text">Fecha, lugar y detalles importantes siempre a mano en un solo sitio.</p>
+          </li>
+          <li class="service-card reveal">
+            <span class="service-icon" aria-hidden="true">
+              <i data-lucide="palette"></i>
+            </span>
+            <h3 class="service-title">Diseño a medida</h3>
+            <p class="service-text">Estética cuidada y personalizada, acorde al estilo de vuestra boda.</p>
+          </li>
+          <li class="service-card reveal">
+            <span class="service-icon" aria-hidden="true">
+              <i data-lucide="share-2"></i>
+            </span>
+            <h3 class="service-title">Fácil de compartir</h3>
+            <p class="service-text">Un enlace para enviar por WhatsApp, email o redes a todos vuestros invitados.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contacto" class="section contact" aria-labelledby="contacto-title">
+      <div class="container contact-inner reveal">
+        <span class="contact-icon" aria-hidden="true">
+          <i data-lucide="mail"></i>
         </span>
+        <h2 id="contacto-title" class="contact-title">¿Preparáis la boda?</h2>
+        <p class="contact-text">
+          Cuéntame vuestra idea y os preparo una invitación digital a vuestra medida.
+        </p>
+        <a href="mailto:heyrevalotti@gmail.com?subject=Invitación%20digital%20para%20mi%20boda" class="contact-email">
+          heyrevalotti@gmail.com
+        </a>
+        <a href="mailto:heyrevalotti@gmail.com?subject=Invitación%20digital%20para%20mi%20boda" class="btn btn-primary btn-large">
+          <i data-lucide="send" aria-hidden="true"></i>
+          Quiero mi invitación
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p class="footer-brand">
+        <i data-lucide="heart" aria-hidden="true"></i>
+        Invitaciones Boda
       </p>
-      <hr class="footer-divider" aria-hidden="true">
-      <p class="footer-line footer-line--date">15 de Agosto de 2026</p>
+      <p class="footer-copy">
+        Invitaciones digitales para bodas.
+        <a href="mailto:heyrevalotti@gmail.com">heyrevalotti@gmail.com</a>
+      </p>
     </div>
   </footer>
 
-  </main>
-
-  <audio
-    id="invitationMusic"
-    class="invitation-music"
-    loop
-    preload="auto"
-    aria-hidden="true"
-  ></audio>
-
-  <button
-    type="button"
-    class="sound-toggle"
-    id="soundToggle"
-    aria-label="Silenciar música"
-    aria-pressed="false"
-    title="Silenciar música"
-  >
-    <i data-lucide="volume-2" class="sound-toggle__icon" id="soundToggleIcon" aria-hidden="true"></i>
-  </button>
-
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="script.js"></script>
-  <script>
-    lucide.createIcons();
-  </script>
 </body>
 </html>
