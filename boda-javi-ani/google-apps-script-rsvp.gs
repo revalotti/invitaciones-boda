@@ -132,8 +132,7 @@ function sendConfirmationEmail(data) {
   var lines = [
     'Hola ' + firstName + ',',
     '',
-    'Gracias por confirmar. Esta es la copia de tu respuesta para la boda del ' +
-      RSVP_CONFIG.weddingDateLabel + ':',
+    'Gracias por confirmar. Esta es la copia de tu respuesta:,
     '',
     '— Asistencia: ' + (data.asistencia_label || data.asistencia || '—')
   ];
