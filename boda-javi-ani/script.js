@@ -3,12 +3,12 @@ if ('scrollRestoration' in history) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Countdown to wedding (15 Aug 2026, 18:00)
+  // Countdown to wedding (15 Aug 2026, 19:30)
   const countdownRoot = document.getElementById('countdownStrip');
   const countdownEl = document.getElementById('countdown');
   const countdownFallback = document.getElementById('countdownFallback');
   if (countdownRoot && countdownEl) {
-    const weddingDate = new Date(countdownRoot.dataset.wedding || '2026-08-15T18:00:00');
+    const weddingDate = new Date(countdownRoot.dataset.wedding || '2026-08-15T19:30:00');
     const daysEl = document.getElementById('countdownDays');
     const hoursEl = document.getElementById('countdownHours');
     const minutesEl = document.getElementById('countdownMinutes');
