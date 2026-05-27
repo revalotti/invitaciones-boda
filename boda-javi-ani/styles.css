@@ -312,7 +312,7 @@ body {
   width: 100%;
   aspect-ratio: 1;
   max-height: min(58dvh, 880px);
-  background: url('assets/envelope-intro.png') center / contain no-repeat;
+  background: url('assets/Sobre-Fallback.png') center / contain no-repeat;
 }
 
 .letter-message {
