@@ -437,8 +437,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const RSVP_MAX_GUESTS = 10;
   const RSVP_GUEST_PLACEHOLDERS = ['Ej. Javier Román Revaliente', 'Ej. Ani Murillo'];
+  function normalizeNamePart(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ');
+  }
 
+  function buildContactFullName(nombre, apellidos) {
+    return [normalizeNamePart(nombre), normalizeNamePart(apellidos)].filter(Boolean).join(' ');
+  }
+  
   const rsvpForm = document.getElementById('rsvpForm');
+  const rsvpNombre = document.getElementById('rsvpNombre');
   const rsvpAttendingBlock = document.getElementById('rsvpAttendingBlock');
   const rsvpDeclineBlock = document.getElementById('rsvpDeclineBlock');
   const rsvpGuestListPanel = document.getElementById('rsvpGuestListPanel');
@@ -564,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function collectExtraGuests() {
     const guests = getGuestRows().map((row) => {
-      const name = row.querySelector('.guest-row__name')?.value.trim() || '';
+      const name = normalizeNamePart(row.querySelector('.guest-row__name')?.value || '');
       const type = row.querySelector('.guest-row__type')?.value || 'adulto';
       return { name, type };
     }).filter((g) => g.name);
@@ -884,7 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const guestListText = formatGuestListForSheet(guests);
 
       const payload = {
-        nombre: String(formData.get('nombre') || '').trim(),
+        nombre: buildContactFullName(formData.get('nombre'), formData.get('apellidos')),
         email: String(formData.get('email') || '').trim(),
         asistencia,
         asistencia_label: isAttending ? 'Asistirá' : 'No asistirá',
