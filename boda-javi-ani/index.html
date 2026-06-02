@@ -169,12 +169,19 @@
           </h3>
 
           <div class="form-group">
-            <label for="rsvpNombre">Nombre y apellidos <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
+            <label for="rsvpNombre">Nombre <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
             <div class="input-wrap input-wrap--single">
-              <input type="text" id="rsvpNombre" name="nombre" required autocomplete="name" placeholder="Ej. Ani Murillo">
+              <input type="text" id="rsvpNombre" name="nombre" required autocomplete="given-name" placeholder="Ej. Ani">
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="rsvpApellidos">Apellidos <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
+            <div class="input-wrap input-wrap--single">
+              <input type="text" id="rsvpApellidos" name="apellidos" required autocomplete="family-name" placeholder="Ej. Murillo">
+            </div>
+          </div>
+          
           <div class="form-group form-group--last">
             <label for="rsvpEmail">Correo electrónico <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
             <div class="input-wrap input-wrap--single">
