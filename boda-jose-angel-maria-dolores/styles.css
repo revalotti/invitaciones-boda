@@ -195,9 +195,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: max(clamp(1.5rem, 4.5vmin, 2.75rem), env(safe-area-inset-top, 0px))
-    clamp(1.25rem, 5vmin, 2.75rem)
-    max(clamp(1.5rem, 4.5vmin, 2.75rem), env(safe-area-inset-bottom, 0px));
+  padding: max(clamp(1.25rem, 3.5vmin, 2.5rem), env(safe-area-inset-top, 0px))
+    clamp(1.1rem, 4.5vmin, 2.75rem)
+    max(clamp(1.25rem, 3.5vmin, 2.5rem), env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
 }
 
@@ -206,11 +206,11 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(1.35rem, 2.8vmin + 1.2vh, 2.5rem);
+  gap: clamp(1rem, 2.2vmin + 0.7vh, 1.65rem);
   width: 100%;
   max-width: min(94vw, 42rem);
   min-height: 0;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
 }
 
 .letter-intro-visual {
@@ -218,7 +218,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(1.1rem, 2vmin + 0.8vh, 1.75rem);
+  gap: clamp(0.85rem, 1.8vmin + 0.5vh, 1.25rem);
   width: 100%;
   flex: 0 1 auto;
   min-height: 0;
@@ -255,7 +255,7 @@ body {
 }
 
 .letter-names {
-  font-size: clamp(1rem, 2.1vw, 1.15rem);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   font-weight: 500;
   font-variant-caps: normal;
   font-feature-settings: normal;
@@ -264,7 +264,7 @@ body {
   letter-spacing: 0.1em;
   text-align: center;
   margin: 0;
-  padding: 0.35rem 0.75rem 0;
+  padding: 0.2rem 0.5rem 0;
   border-top: none;
   flex-shrink: 0;
   line-height: 1.45;
@@ -308,7 +308,7 @@ body {
   display: block;
   width: 100%;
   height: auto;
-  max-height: min(38dvh, 420px);
+  max-height: min(40dvh, 440px);
   object-fit: contain;
   background: transparent;
   user-select: none;
@@ -321,7 +321,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.55rem;
   text-align: center;
   max-width: min(92%, 26rem);
   margin: 0;
@@ -338,7 +338,7 @@ body {
 
 .letter-message__title {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3.6vw, 2.35rem);
+  font-size: clamp(1.65rem, 3.4vw, 2.2rem);
   font-weight: 600;
   letter-spacing: 0.16em;
   color: var(--color-charcoal);
@@ -347,7 +347,7 @@ body {
 
 .letter-message__subtitle {
   font-family: var(--font-teodor);
-  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+  font-size: clamp(1.1rem, 2.3vw, 1.35rem);
   font-weight: 400;
   color: var(--color-text);
 }
@@ -368,15 +368,15 @@ body {
 
 .letter-hint {
   font-family: var(--font-display);
-  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  font-size: clamp(0.98rem, 2.2vw, 1.12rem);
   font-weight: 600;
   letter-spacing: var(--track-caps);
   line-height: 1.35;
   text-transform: uppercase;
   color: var(--color-hueso);
   text-align: center;
-  margin: 0.15rem 0 0;
-  padding: clamp(0.95rem, 2.2vmin, 1.15rem) clamp(1.65rem, 4.5vw, 2.4rem);
+  margin: 0;
+  padding: clamp(0.9rem, 2vmin, 1.05rem) clamp(1.55rem, 4vw, 2.25rem);
   border: 1px solid var(--color-btn);
   border-radius: var(--radius-btn);
   background: var(--color-btn);
@@ -546,72 +546,58 @@ body {
 
 /* Intro carta: espacio y escala en viewports bajos / apaisado */
 @media (max-height: 700px) {
-  .letter-photo-stage {
-    padding-top: max(clamp(1rem, 3vmin, 1.5rem), env(safe-area-inset-top, 0px));
-    padding-bottom: max(clamp(1rem, 3vmin, 1.5rem), env(safe-area-inset-bottom, 0px));
-  }
-
   .letter-intro-layout {
-    gap: clamp(1rem, 2vmin + 0.8vh, 1.5rem);
-    justify-content: center;
-    height: auto;
-    padding-block: 0;
+    gap: clamp(0.8rem, 1.8vmin + 0.5vh, 1.2rem);
   }
 
   .letter-intro-visual {
-    gap: clamp(0.85rem, 1.6vmin + 0.5vh, 1.25rem);
+    gap: clamp(0.7rem, 1.4vmin + 0.35vh, 1rem);
   }
 
   .letter-envelope-img {
-    max-height: min(34dvh, 340px);
+    max-height: min(36dvh, 360px);
   }
 
   .letter-message {
-    gap: 0.55rem;
+    gap: 0.45rem;
   }
 
   .letter-message__title {
-    font-size: clamp(1.55rem, 4.5vw, 1.95rem);
+    font-size: clamp(1.45rem, 4.2vw, 1.85rem);
   }
 
   .letter-message__subtitle {
-    font-size: clamp(1.05rem, 3vw, 1.25rem);
+    font-size: clamp(1.02rem, 2.8vw, 1.22rem);
   }
 
   .letter-hint {
-    font-size: clamp(0.95rem, 2.4vw, 1.05rem);
-    padding: 0.85rem 1.5rem;
+    font-size: clamp(0.92rem, 2.2vw, 1.05rem);
+    padding: 0.8rem 1.4rem;
   }
 
   .letter-names {
-    font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+    font-size: clamp(0.92rem, 2.4vw, 1.02rem);
   }
 }
 
 @media (max-height: 580px) {
   .letter-envelope-img {
-    max-height: min(30dvh, 260px);
+    max-height: min(32dvh, 280px);
   }
 
   .letter-intro-layout {
-    gap: clamp(0.75rem, 1.5vmin, 1.1rem);
-    min-height: 0;
-    justify-content: center;
+    gap: clamp(0.6rem, 1.3vmin, 0.95rem);
   }
 
   .letter-intro-visual {
-    gap: clamp(0.65rem, 1.2vmin, 0.95rem);
-  }
-
-  .letter-hint {
-    margin-top: 0;
+    gap: clamp(0.55rem, 1.1vmin, 0.8rem);
   }
 }
 
 @media (max-height: 480px) and (orientation: landscape) {
   .letter-photo-stage {
-    padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
-    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+    padding-top: max(0.4rem, env(safe-area-inset-top, 0px));
+    padding-bottom: max(0.4rem, env(safe-area-inset-bottom, 0px));
   }
 
   .letter-envelope-wrap {
@@ -623,36 +609,32 @@ body {
   }
 
   .letter-intro-layout {
-    gap: 0.55rem;
-    min-height: 0;
-    justify-content: center;
+    gap: 0.5rem;
   }
 
   .letter-intro-visual {
-    gap: 0.4rem;
-    flex: 0 1 auto;
-  }
-
-  .letter-message {
     gap: 0.35rem;
   }
 
+  .letter-message {
+    gap: 0.3rem;
+  }
+
   .letter-message__title {
-    font-size: clamp(1.15rem, 3.5vw, 1.4rem);
+    font-size: clamp(1.1rem, 3.5vw, 1.35rem);
   }
 
   .letter-message__subtitle {
-    font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+    font-size: clamp(0.92rem, 2.4vw, 1.05rem);
   }
 
   .letter-names {
-    font-size: clamp(0.9rem, 2.2vw, 1rem);
+    font-size: clamp(0.88rem, 2.2vw, 0.98rem);
   }
 
   .letter-hint {
-    font-size: clamp(0.88rem, 2vw, 0.98rem);
-    padding: 0.7rem 1.25rem;
-    line-height: 1.35;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    padding: 0.65rem 1.2rem;
   }
 }
 
@@ -3173,15 +3155,15 @@ body {
   }
 
   .letter-message__title {
-    font-size: clamp(1.65rem, 2.6vw, 2.2rem);
+    font-size: clamp(1.55rem, 2.5vw, 2.1rem);
   }
 
   .letter-message__subtitle {
-    font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
   }
 
   .letter-names {
-    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
   }
 
   .letter-hint {
@@ -3226,63 +3208,62 @@ body {
   }
 
   .letter-photo-stage {
-    align-items: stretch;
-    padding: max(1.75rem, env(safe-area-inset-top, 0px))
-      clamp(1.35rem, 6vw, 1.85rem)
-      max(1.75rem, env(safe-area-inset-bottom, 0px));
+    align-items: center;
+    justify-content: center;
+    padding: max(1.25rem, env(safe-area-inset-top, 0px))
+      clamp(1.15rem, 5vw, 1.75rem)
+      max(1.25rem, env(safe-area-inset-bottom, 0px));
   }
 
   .letter-intro-layout {
-    gap: clamp(1.35rem, 3vh, 2rem);
-    max-width: min(100%, 24rem);
+    gap: 1.15rem;
+    max-width: min(100%, 22rem);
     margin-inline: auto;
-    justify-content: space-between;
-    height: 100%;
-    min-height: 0;
-    padding-block: clamp(0.5rem, 2vh, 1rem);
+    justify-content: center;
+    height: auto;
+    flex: 0 1 auto;
+    padding-block: 0;
   }
 
   .letter-intro-visual {
     width: 100%;
-    gap: clamp(1.15rem, 2.5vh, 1.65rem);
+    gap: 0.95rem;
   }
 
   .letter-message {
-    gap: 0.75rem;
-    padding: 0 0.35rem;
+    gap: 0.5rem;
+    padding: 0 0.25rem;
   }
 
   .letter-names {
-    font-size: clamp(1rem, 3.8vw, 1.125rem);
-    padding: 0.25rem 0.5rem 0;
-    line-height: 1.5;
-    letter-spacing: 0.08em;
+    font-size: clamp(0.95rem, 3.6vw, 1.05rem);
+    padding: 0.15rem 0.35rem 0;
+    line-height: 1.45;
   }
 
   .letter-hint {
-    font-size: clamp(1rem, 3.6vw, 1.1rem);
-    padding: 1rem 1.85rem;
+    font-size: clamp(0.95rem, 3.4vw, 1.05rem);
+    padding: 0.9rem 1.65rem;
     line-height: 1.35;
-    margin-top: 0.15rem;
+    margin-top: 0;
   }
 
   .letter-envelope-wrap {
-    width: min(78vw, 20rem);
+    width: min(82vw, 21rem);
   }
 
   .letter-envelope-img {
-    max-height: min(32dvh, 300px);
+    max-height: min(38dvh, 360px);
   }
 
   .letter-message__title {
-    font-size: clamp(1.7rem, 7vw, 2.05rem);
-    line-height: 1.18;
+    font-size: clamp(1.55rem, 6.5vw, 1.9rem);
+    line-height: 1.2;
   }
 
   .letter-message__subtitle {
-    font-size: clamp(1.125rem, 4.2vw, 1.3rem);
+    font-size: clamp(1.05rem, 4vw, 1.22rem);
     line-height: 1.4;
-    max-width: 18rem;
   }
 
   .section-title {
@@ -3619,51 +3600,6 @@ body {
   .btn-map,
   .btn-submit {
     min-width: min(100%, 14.25rem);
-  }
-}
-
-/* Móvil + altura corta: compactar sin perder legibilidad */
-@media (max-width: 768px) and (max-height: 700px) {
-  .letter-photo-stage {
-    align-items: center;
-    padding-top: max(1.15rem, env(safe-area-inset-top, 0px));
-    padding-bottom: max(1.15rem, env(safe-area-inset-bottom, 0px));
-  }
-
-  .letter-intro-layout {
-    height: auto;
-    justify-content: center;
-    gap: 1.15rem;
-    padding-block: 0;
-  }
-
-  .letter-intro-visual {
-    gap: 0.95rem;
-  }
-
-  .letter-envelope-img {
-    max-height: min(30dvh, 260px);
-  }
-
-  .letter-message {
-    gap: 0.55rem;
-  }
-
-  .letter-message__title {
-    font-size: clamp(1.55rem, 6.5vw, 1.85rem);
-  }
-
-  .letter-message__subtitle {
-    font-size: clamp(1.05rem, 4vw, 1.2rem);
-  }
-
-  .letter-hint {
-    font-size: 1rem;
-    padding: 0.9rem 1.65rem;
-  }
-
-  .letter-names {
-    font-size: clamp(0.95rem, 3.5vw, 1.05rem);
   }
 }
 
