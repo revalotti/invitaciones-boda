@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 220" fill="none">
+  <g stroke="#8b3a2f" stroke-width="1.15" fill="none" opacity="0.28">
+    <path d="M28 210 V48"/>
+    <path d="M48 210 V48"/>
+    <path d="M38 210 V48"/>
+    <path d="M18 48 H58"/>
+    <path d="M14 42 H62"/>
+    <path d="M22 36 H54"/>
+    <path d="M18 210 H58"/>
+    <path d="M14 216 H62"/>
+    <path d="M70 28 C95 18 120 28 140 12"/>
+    <path d="M70 36 C100 26 125 38 148 22"/>
+    <path d="M72 44 C105 36 128 48 150 34"/>
+  </g>
+</svg>
