@@ -157,8 +157,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let storyTranslateTimeoutId = null;
   let storyShowingSpanish = false;
   let storyQuotePaused = true;
+  let storyWaitResolve = null;
+  let storyCycleToken = 0;
   let letterFadeTimeoutId = null;
   let letterCloseTimeoutId = null;
+  let letterHeroEnterTimeoutId = null;
 
   const clearLetterTimers = () => {
     if (letterFadeTimeoutId) {
@@ -169,6 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
       clearTimeout(letterCloseTimeoutId);
       letterCloseTimeoutId = null;
     }
+    if (letterHeroEnterTimeoutId) {
+      clearTimeout(letterHeroEnterTimeoutId);
+      letterHeroEnterTimeoutId = null;
+    }
   };
 
   function scrollToTop() {
@@ -177,8 +184,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.scrollTop = 0;
   }
 
-  function resetInvitationToStart() {
+  function restartLetterIntroAnimations() {
+    if (!letterOverlay) return;
+    const els = letterOverlay.querySelectorAll(
+      '.letter-message, .letter-hint, .letter-names, .letter-envelope-wrap, .letter-fade-white, .letter-envelope-full'
+    );
+    els.forEach((el) => {
+      el.style.animation = 'none';
+    });
+    void letterOverlay.offsetWidth;
+    els.forEach((el) => {
+      el.style.removeProperty('animation');
+    });
+  }
+
+  function resetInvitationToStart({ restartLetterIntro = false } = {}) {
     scrollToTop();
+
+    document.documentElement.classList.add('is-letter-locked');
 
     if (letterOverlay) {
       letterOverlay.classList.remove('seal-break', 'opening', 'closed', 'is-playing');
@@ -189,7 +212,15 @@ document.addEventListener('DOMContentLoaded', () => {
     clearLetterTimers();
 
     if (invitationMain) {
-      invitationMain.classList.remove('visible', 'opened');
+      invitationMain.classList.remove('visible', 'opened', 'hero-enter');
+      invitationMain.querySelectorAll('.hero-visual, .hero-title__img, .hero-cta-btn').forEach((el) => {
+        el.getAnimations?.().forEach((anim) => anim.cancel());
+      });
+    }
+
+    // Solo tras bfcache/pageshow: re-lanzar intros. Nunca cancel() a secas (deja opacity:0).
+    if (restartLetterIntro) {
+      restartLetterIntroAnimations();
     }
 
     if (invitationMusic) {
@@ -203,15 +234,28 @@ document.addEventListener('DOMContentLoaded', () => {
     storyTranslateStarted = false;
     storyShowingSpanish = false;
     storyQuotePaused = true;
+    storyCycleToken += 1;
+    if (storyWaitResolve) {
+      const resolve = storyWaitResolve;
+      storyWaitResolve = null;
+      resolve(false);
+    }
     if (storyTranslateTimeoutId) {
       clearTimeout(storyTranslateTimeoutId);
       storyTranslateTimeoutId = null;
     }
+    if (storyQuote) storyQuote.classList.remove('is-morphing');
     if (storyQuoteIt && storyQuoteEs) {
+      [storyQuoteIt, storyQuoteEs].forEach((el) => {
+        el.getAnimations?.().forEach((anim) => anim.cancel());
+        el.classList.remove('is-animating', 'is-leaving', 'is-active');
+        el.style.removeProperty('opacity');
+        el.style.removeProperty('transform');
+        el.style.removeProperty('filter');
+        el.style.removeProperty('letter-spacing');
+      });
       storyQuoteIt.classList.add('is-active');
-      storyQuoteIt.classList.remove('is-leaving');
       storyQuoteIt.removeAttribute('aria-hidden');
-      storyQuoteEs.classList.remove('is-active', 'is-leaving');
       storyQuoteEs.setAttribute('aria-hidden', 'true');
     }
     if (storySection) storySection.classList.remove('in-view');
@@ -222,21 +266,51 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   resetInvitationToStart();
-  window.addEventListener('pageshow', resetInvitationToStart);
+  window.addEventListener('pageshow', (event) => {
+    resetInvitationToStart({ restartLetterIntro: event.persisted });
+  });
   window.addEventListener('load', scrollToTop);
 
   if (letterOverlay && invitationMain) {
-    const LETTER_HOLD_MS = 420;
-    const LETTER_FADE_MS = 550;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const LETTER_HOLD_MS = prefersReducedMotion ? 0 : 420;
+    const LETTER_FADE_MS = prefersReducedMotion ? 120 : 900;
+    /* Arranca a mitad del fade del overlay: puente continuo, sin pausa muerta */
+    const LETTER_OVERLAY_OUT_MS = prefersReducedMotion ? 0 : 380;
+
+    const startHeroEnter = () => {
+      invitationMain.classList.add('hero-enter');
+      letterHeroEnterTimeoutId = null;
+    };
+
+    const finishLetterOverlay = () => {
+      letterOverlay.classList.add('closed');
+      letterOverlay.setAttribute('aria-hidden', 'true');
+      letterOverlay.setAttribute('tabindex', '-1');
+      document.documentElement.classList.remove('is-letter-locked');
+
+      if (typeof letterOverlay.blur === 'function') {
+        letterOverlay.blur();
+      }
+
+      if (!invitationMain.hasAttribute('tabindex')) {
+        invitationMain.setAttribute('tabindex', '-1');
+      }
+      try {
+        invitationMain.focus({ preventScroll: true });
+      } catch {
+        /* ignore */
+      }
+
+      // Esperar a que el fundido del overlay termine antes del zoom / título / CTA
+      letterHeroEnterTimeoutId = setTimeout(startHeroEnter, LETTER_OVERLAY_OUT_MS);
+
+      letterCloseTimeoutId = null;
+    };
 
     const startLetterFadeOut = () => {
       letterOverlay.classList.add('opening');
-      letterCloseTimeoutId = setTimeout(() => {
-        letterOverlay.classList.add('closed');
-        letterOverlay.setAttribute('aria-hidden', 'true');
-        letterOverlay.setAttribute('tabindex', '-1');
-        letterCloseTimeoutId = null;
-      }, LETTER_FADE_MS);
+      letterCloseTimeoutId = setTimeout(finishLetterOverlay, LETTER_FADE_MS);
     };
 
     const scheduleLetterTransition = () => {
@@ -253,9 +327,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      scrollToTop();
       letterOverlay.classList.add('seal-break', 'is-playing');
-      invitationMain.classList.add('visible');
-      invitationMain.classList.add('opened');
+      invitationMain.classList.add('visible', 'opened');
       startInvitationMusic();
       scheduleLetterTransition();
     };
@@ -295,9 +369,12 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(historiaSection);
   }
 
-  // Nuestra historia: italiano → español con ritmo asimétrico (menos mecánico)
-  const STORY_HOLD_IT_MS = 3600;
-  const STORY_HOLD_ES_MS = 8200;
+  // Nuestra historia: morph tipográfico italiano ↔ español (ritmo pausado)
+  const STORY_HOLD_IT_MS = 3000;
+  const STORY_HOLD_ES_MS = 22000;
+  const STORY_MORPH_OUT_MS = 1500;
+  const STORY_MORPH_IN_MS = 1750;
+  const STORY_MORPH_OVERLAP_MS = 520;
 
   const clearStoryTranslateTimer = () => {
     if (storyTranslateTimeoutId) {
@@ -306,43 +383,145 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const setStoryQuoteLang = (showSpanish) => {
-    if (!storyQuoteIt || !storyQuoteEs) return;
-    storyShowingSpanish = showSpanish;
+  const waitStory = (ms) =>
+    new Promise((resolve) => {
+      clearStoryTranslateTimer();
+      if (storyWaitResolve) {
+        const prev = storyWaitResolve;
+        storyWaitResolve = null;
+        prev(false);
+      }
+      storyWaitResolve = resolve;
+      storyTranslateTimeoutId = setTimeout(() => {
+        storyTranslateTimeoutId = null;
+        storyWaitResolve = null;
+        resolve(true);
+      }, ms);
+    });
 
-    if (showSpanish) {
-      storyQuoteIt.classList.remove('is-active');
-      storyQuoteIt.classList.add('is-leaving');
-      storyQuoteIt.setAttribute('aria-hidden', 'true');
-      storyQuoteEs.classList.remove('is-leaving');
-      storyQuoteEs.classList.add('is-active');
-      storyQuoteEs.removeAttribute('aria-hidden');
-      return;
+  const settleStoryLine = (el, active) => {
+    el.getAnimations?.().forEach((anim) => anim.cancel());
+    el.classList.toggle('is-active', active);
+    el.classList.remove('is-animating', 'is-leaving');
+    el.style.removeProperty('opacity');
+    el.style.removeProperty('transform');
+    el.style.removeProperty('filter');
+    el.style.removeProperty('letter-spacing');
+    if (active) el.removeAttribute('aria-hidden');
+    else el.setAttribute('aria-hidden', 'true');
+  };
+
+  const morphStoryQuote = async (toSpanish, token) => {
+    if (!storyQuote || !storyQuoteIt || !storyQuoteEs || storyQuotePaused || token !== storyCycleToken) {
+      return false;
     }
 
-    storyQuoteEs.classList.remove('is-active');
-    storyQuoteEs.classList.add('is-leaving');
-    storyQuoteEs.setAttribute('aria-hidden', 'true');
-    storyQuoteIt.classList.remove('is-leaving');
-    storyQuoteIt.classList.add('is-active');
-    storyQuoteIt.removeAttribute('aria-hidden');
+    const fromEl = toSpanish ? storyQuoteIt : storyQuoteEs;
+    const toEl = toSpanish ? storyQuoteEs : storyQuoteIt;
+
+    storyQuote.classList.add('is-morphing');
+    fromEl.classList.add('is-animating', 'is-leaving');
+    fromEl.classList.remove('is-active');
+    toEl.classList.add('is-animating');
+    toEl.classList.remove('is-active');
+    fromEl.setAttribute('aria-hidden', 'true');
+
+    const outAnim = fromEl.animate(
+      [
+        {
+          opacity: 1,
+          filter: 'blur(0px)',
+          transform: 'translate3d(0, 0, 0) scale(1)',
+          letterSpacing: '0.02em',
+          offset: 0
+        },
+        {
+          opacity: 0.35,
+          filter: 'blur(2.5px)',
+          transform: 'translate3d(0, -0.12em, 0) scale(1.01)',
+          letterSpacing: '0.045em',
+          offset: 0.45
+        },
+        {
+          opacity: 0,
+          filter: 'blur(7px)',
+          transform: 'translate3d(0, -0.42em, 0) scale(1.025)',
+          letterSpacing: '0.08em',
+          offset: 1
+        }
+      ],
+      {
+        duration: STORY_MORPH_OUT_MS,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        fill: 'forwards'
+      }
+    );
+
+    const overlapped = await waitStory(STORY_MORPH_OVERLAP_MS);
+    if (!overlapped || storyQuotePaused || token !== storyCycleToken) {
+      outAnim.cancel();
+      return false;
+    }
+
+    toEl.removeAttribute('aria-hidden');
+
+    const inAnim = toEl.animate(
+      [
+        {
+          opacity: 0,
+          filter: 'blur(9px)',
+          transform: 'translate3d(0, 0.55em, 0) scale(0.975)',
+          letterSpacing: '-0.015em',
+          offset: 0
+        },
+        {
+          opacity: 0.55,
+          filter: 'blur(3px)',
+          transform: 'translate3d(0, 0.16em, 0) scale(0.992)',
+          letterSpacing: '0.008em',
+          offset: 0.55
+        },
+        {
+          opacity: 1,
+          filter: 'blur(0px)',
+          transform: 'translate3d(0, 0, 0) scale(1)',
+          letterSpacing: '0.02em',
+          offset: 1
+        }
+      ],
+      {
+        duration: STORY_MORPH_IN_MS,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        fill: 'forwards'
+      }
+    );
+
+    try {
+      await Promise.all([outAnim.finished, inAnim.finished]);
+    } catch {
+      return false;
+    }
+
+    if (storyQuotePaused || token !== storyCycleToken) return false;
+
+    settleStoryLine(fromEl, false);
+    settleStoryLine(toEl, true);
+    storyShowingSpanish = toSpanish;
+    storyQuote.classList.remove('is-morphing');
+    return true;
   };
 
-  const scheduleStoryStep = (fn, delay) => {
-    clearStoryTranslateTimer();
-    storyTranslateTimeoutId = setTimeout(fn, delay);
-  };
-
-  const continueStoryCycle = () => {
-    if (storyQuotePaused || !storyQuoteIt || !storyQuoteEs) return;
+  const continueStoryCycle = async (token) => {
+    if (storyQuotePaused || !storyQuoteIt || !storyQuoteEs || token !== storyCycleToken) return;
 
     const holdMs = storyShowingSpanish ? STORY_HOLD_ES_MS : STORY_HOLD_IT_MS;
+    const held = await waitStory(holdMs);
+    if (!held || storyQuotePaused || token !== storyCycleToken) return;
 
-    scheduleStoryStep(() => {
-      if (storyQuotePaused) return;
-      setStoryQuoteLang(!storyShowingSpanish);
-      continueStoryCycle();
-    }, holdMs);
+    const morphed = await morphStoryQuote(!storyShowingSpanish, token);
+    if (!morphed || storyQuotePaused || token !== storyCycleToken) return;
+
+    continueStoryCycle(token);
   };
 
   const startStoryTranslate = () => {
@@ -351,8 +530,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       if (!storyTranslateStarted) {
         storyTranslateStarted = true;
-        setStoryQuoteLang(true);
-        storyQuoteIt.classList.remove('is-leaving');
+        settleStoryLine(storyQuoteIt, false);
+        settleStoryLine(storyQuoteEs, true);
+        storyShowingSpanish = true;
       }
       return;
     }
@@ -360,13 +540,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (storyQuotePaused) {
       storyQuotePaused = false;
       storyTranslateStarted = true;
-      continueStoryCycle();
+      storyCycleToken += 1;
+      continueStoryCycle(storyCycleToken);
     }
   };
 
   const pauseStoryTranslate = () => {
     storyQuotePaused = true;
+    storyCycleToken += 1;
     clearStoryTranslateTimer();
+    if (storyWaitResolve) {
+      const resolve = storyWaitResolve;
+      storyWaitResolve = null;
+      resolve(false);
+    }
+    if (storyQuote) storyQuote.classList.remove('is-morphing');
+    if (storyQuoteIt && storyQuoteEs) {
+      [storyQuoteIt, storyQuoteEs].forEach((el) => {
+        el.getAnimations?.().forEach((anim) => anim.cancel());
+        el.classList.remove('is-animating', 'is-leaving');
+        el.style.removeProperty('opacity');
+        el.style.removeProperty('transform');
+        el.style.removeProperty('filter');
+        el.style.removeProperty('letter-spacing');
+      });
+      settleStoryLine(storyQuoteIt, !storyShowingSpanish);
+      settleStoryLine(storyQuoteEs, storyShowingSpanish);
+    }
   };
 
   if (storySection) {

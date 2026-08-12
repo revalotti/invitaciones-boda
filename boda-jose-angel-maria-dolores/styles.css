@@ -148,6 +148,10 @@ body {
 /* ===== Letter Overlay ===== */
 .letter-overlay {
   --letter-gold: #9d7643;
+  --letter-ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --letter-ease-expressive: cubic-bezier(0.16, 1, 0.3, 1);
+  --letter-ease-soft: cubic-bezier(0.33, 0.1, 0.25, 1);
+  --letter-parchment: #ebe3d4;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 9999;
@@ -155,16 +159,38 @@ body {
   min-height: 100vh; min-height: 100dvh;
   cursor: pointer;
   overflow: hidden;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
+  transition:
+    opacity 0.95s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0.95s cubic-bezier(0.4, 0, 0.2, 1);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   background: var(--color-hueso);
 }
 
+.letter-overlay.is-playing,
+.letter-overlay.opening,
+.letter-overlay.closed {
+  cursor: default;
+  pointer-events: none;
+}
+
 .letter-overlay.closed {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
+}
+
+.letter-overlay.closed .letter-envelope-wrap,
+.letter-overlay.closed .letter-fade-white,
+.letter-overlay.closed .letter-intro-layout .letter-message,
+.letter-overlay.closed .letter-intro-layout .letter-hint,
+.letter-overlay.closed .letter-intro-layout .letter-names {
+  will-change: auto;
+}
+
+html.is-letter-locked,
+html.is-letter-locked body {
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .letter-overlay:focus-visible {
@@ -400,23 +426,41 @@ body {
   will-change: transform, opacity;
 }
 
-.letter-overlay.is-playing .letter-intro-layout .letter-message,
-.letter-overlay.is-playing .letter-intro-layout .letter-names,
-.letter-overlay.is-playing .letter-intro-layout .letter-hint,
-.letter-overlay.opening .letter-intro-layout .letter-message,
-.letter-overlay.opening .letter-intro-layout .letter-names,
-.letter-overlay.opening .letter-intro-layout .letter-hint {
-  opacity: 0;
-  transition: opacity 0.28s ease;
+/* Salida tipográfica: estado asentado + solo destino (evita saltos al interrumpir la intro) */
+.letter-overlay.is-playing .letter-intro-layout .letter-message {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+  animation: letterUiExitUp 0.7s var(--letter-ease-soft) forwards;
   pointer-events: none;
+  will-change: transform, opacity, filter;
 }
 
-.letter-overlay.is-playing .letter-envelope-wrap,
-.letter-overlay.opening .letter-envelope-wrap {
-  animation: none;
+.letter-overlay.is-playing .letter-intro-layout .letter-hint {
   opacity: 1;
-  transform: none;
+  transform: translate3d(0, 0, 0);
+  animation: letterUiExitDown 0.65s var(--letter-ease-soft) 0.06s forwards;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+}
+
+.letter-overlay.is-playing .letter-intro-layout .letter-names {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+  animation: letterUiExitDown 0.68s var(--letter-ease-soft) 0.12s forwards;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+}
+
+/* Sobre: micro-presión → elevación → disolución (solo is-playing: no reinicia al añadir opening) */
+.letter-overlay.is-playing .letter-envelope-wrap {
   z-index: 2;
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+  animation: letterEnvelopeCeremony 1.4s var(--letter-ease-soft) forwards;
+  will-change: transform, opacity, filter;
 }
 
 .letter-overlay.opening .letter-fade-white {
@@ -487,8 +531,8 @@ body {
   transform-style: preserve-3d;
 }
 
-.letter-overlay:hover:not(.opening) .letter-flap-wrapper,
-.letter-overlay.seal-break .letter-flap-wrapper {
+.letter-overlay:hover:not(.is-playing):not(.opening):not(.closed) .letter-flap-wrapper,
+.letter-overlay.seal-break:not(.opening):not(.closed) .letter-flap-wrapper {
   transform: rotateX(6deg);
   transition: transform 0.12s cubic-bezier(0.33, 0, 0.2, 1);
 }
@@ -533,22 +577,85 @@ body {
 
 .letter-overlay.opening .letter-flap-wrapper {
   transform: rotateX(15deg);
-  transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: transform 0.45s var(--letter-ease-out);
 }
 
+/* Velo sólido del color del hero — cubre al 100% al terminar (sin huecos) */
 .letter-fade-white {
   position: absolute;
   inset: 0;
-  background: var(--color-marble);
+  background: var(--letter-parchment, #ebe3d4);
   opacity: 0;
   z-index: 5;
   pointer-events: none;
-  transition: none;
+  will-change: opacity;
 }
 
 .letter-overlay.opening .letter-fade-white {
-  opacity: 1;
-  transition: opacity 0.55s ease-in-out;
+  animation: letterVeilBloom 1.05s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.letter-overlay.opening .letter-envelope-full {
+  animation: letterStageSettle 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.12s forwards;
+}
+
+@keyframes letterUiExitUp {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -0.5rem, 0);
+    filter: blur(4px);
+  }
+}
+
+@keyframes letterUiExitDown {
+  to {
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0);
+    filter: blur(4px);
+  }
+}
+
+@keyframes letterEnvelopeCeremony {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+  14% {
+    opacity: 1;
+    transform: translate3d(0, 0.1rem, 0) scale(0.985);
+    filter: blur(0);
+  }
+  32% {
+    opacity: 1;
+    transform: translate3d(0, -0.08rem, 0) scale(1.008);
+    filter: blur(0);
+  }
+  68% {
+    opacity: 0.7;
+    transform: translate3d(0, -1vh, 0) scale(1.045);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -1.8vh, 0) scale(1.1);
+    filter: blur(8px);
+  }
+}
+
+@keyframes letterVeilBloom {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes letterStageSettle {
+  to {
+    background: var(--letter-parchment, #ebe3d4);
+  }
 }
 
 /* Intro carta: espacio y escala en viewports bajos / apaisado */
@@ -719,13 +826,19 @@ body {
   z-index: 1;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease-out 0.25s, visibility 0.5s ease-out 0.25s;
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    visibility 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
   background: var(--color-marble);
 }
 
 .invitation-main.visible {
   opacity: 1;
   visibility: visible;
+}
+
+.invitation-main:focus {
+  outline: none;
 }
 
 /* Reveals */
@@ -755,36 +868,52 @@ body {
   filter: blur(0);
 }
 
-/* Hero appears after opening letter */
-.invitation-main.opened .hero-content > * {
-  animation: heroContentReveal 0.75s ease forwards;
+/* Hero: coreografía continua tras el fundido (solapes, sin “pasos” mecánicos) */
+.invitation-main.opened .hero-visual {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.invitation-main.opened .hero-content > *:nth-child(1) { animation-delay: 0.22s; }
-.invitation-main.opened .hero-cta-btn {
-  animation: heroCtaReveal 0.7s ease forwards;
-  animation-delay: 0.45s;
+.invitation-main.hero-enter .hero-visual {
+  animation: heroVisualZoom 2.75s cubic-bezier(0.22, 0.15, 0.2, 1) forwards;
+}
+
+.invitation-main.hero-enter .hero-title__img {
+  animation: heroTitleReveal 1.25s cubic-bezier(0.22, 0.61, 0.36, 1) 0.55s both;
+}
+
+.invitation-main.hero-enter .hero-cta-btn {
+  animation: heroCtaReveal 1s cubic-bezier(0.22, 0.61, 0.36, 1) 1.05s both;
+}
+
+@keyframes heroVisualZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.035);
+  }
+}
+
+@keyframes heroTitleReveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.55rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @keyframes heroCtaReveal {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translate3d(0, 0.55rem, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes heroContentReveal {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -818,24 +947,9 @@ body {
   object-position: center 68%;
   flex: none;
   opacity: 0;
-  transform: scale(1.03);
+  transform: scale(1);
   transform-origin: center center;
-}
-
-.invitation-main.opened .hero-visual {
-  animation: heroVisualReveal 1.05s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-  animation-delay: 0.06s;
-}
-
-@keyframes heroVisualReveal {
-  from {
-    opacity: 0;
-    transform: scale(1.04);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  will-change: opacity, transform;
 }
 
 .hero-content {
@@ -874,8 +988,8 @@ body {
 }
 
 .hero-content > * {
-  opacity: 0;
-  transform: translateY(18px);
+  opacity: 1;
+  transform: none;
 }
 
 .hero-title {
@@ -904,6 +1018,8 @@ body {
   max-height: calc(100dvh - 2.5rem);
   object-fit: contain;
   object-position: center;
+  opacity: 0;
+  transform: translate3d(0, 0.55rem, 0);
   /* Halo + edge separation so bronze strokes never dissolve into stone detail */
   filter:
     drop-shadow(0 0 0.55rem rgba(235, 227, 212, 0.95))
@@ -1397,7 +1513,7 @@ body {
   pointer-events: none;
   user-select: none;
   background-repeat: repeat-x;
-  background-position: center top;
+  background-position: 0 0;
   background-size: auto 100%;
   background-color: transparent;
 }
@@ -1567,6 +1683,7 @@ body {
   display: grid;
   place-items: center;
   min-height: 1.35em;
+  isolation: isolate;
 }
 
 .story-quote__line {
@@ -1574,40 +1691,23 @@ body {
   margin: 0;
   width: 100%;
   opacity: 0;
-  transform: translate3d(0, 0.18em, 0);
-  filter: blur(0);
-  transition:
-    opacity 1.35s cubic-bezier(0.33, 0.1, 0.25, 1),
-    transform 1.35s cubic-bezier(0.33, 0.1, 0.25, 1);
+  transform: translate3d(0, 0.55em, 0) scale(0.985);
+  filter: blur(8px);
+  letter-spacing: -0.01em;
   pointer-events: none;
-  will-change: opacity, transform;
+  will-change: opacity, transform, filter, letter-spacing;
 }
 
 .story-quote__line.is-active {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+  letter-spacing: 0.02em;
   pointer-events: auto;
 }
 
-.story-quote__line.is-leaving {
-  opacity: 0;
-  transform: translate3d(0, -0.12em, 0);
-}
-
-.story-quote__line--it.is-leaving {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.story-quote__line--es.is-active {
-  transition-delay: 0.12s;
-}
-
-.story-quote__line--es.is-leaving {
-  transition-delay: 0s;
-}
-
-.story-quote__line--it.is-active {
-  transition-delay: 0.18s;
+.story-quote__line.is-animating {
+  pointer-events: none;
 }
 
 .story-section-heading::after {
@@ -1619,6 +1719,13 @@ body {
   background: var(--color-pompeian);
   opacity: 0.45;
   border-radius: 0;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  transform-origin: center;
+}
+
+.story-section-heading.is-morphing::after {
+  opacity: 0.18;
+  transform: scaleX(0.55);
 }
 
 .story-photo {
@@ -2490,11 +2597,11 @@ body {
 
 .rsvp-stay-note__title {
   margin: 0 0 0.3rem;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--rsvp-font-label, var(--text-base));
-  font-weight: 500;
+  font-weight: var(--fw-semibold);
   color: var(--color-charcoal);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
   line-height: var(--leading-snug);
 }
 
@@ -3968,24 +4075,63 @@ body {
   .reveal-on-scroll,
   .hero-visual,
   .hero-content > *,
+  .hero-title__img,
   .hero-cta-btn {
     opacity: 1 !important;
     transform: none !important;
-    filter: none !important;
     transition: none !important;
     animation: none !important;
   }
 
+  .reveal-on-scroll,
+  .hero-visual,
+  .hero-content > *,
+  .hero-cta-btn {
+    filter: none !important;
+  }
+
   .story-quote__line {
-    transition: none;
-    filter: none;
-    transform: none;
+    filter: none !important;
+    transform: none !important;
+    letter-spacing: 0.02em !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .story-section-heading::after,
+  .story-section-heading.is-morphing::after {
+    transition: none !important;
+    transform: none !important;
   }
 
   .letter-intro-layout .letter-message,
   .letter-intro-layout .letter-names,
   .letter-envelope-wrap,
   .letter-intro-layout .letter-hint {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+
+  .letter-overlay,
+  .letter-fade-white,
+  .letter-envelope-full,
+  .invitation-main {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .letter-overlay.is-playing .letter-intro-layout .letter-message,
+  .letter-overlay.is-playing .letter-intro-layout .letter-hint,
+  .letter-overlay.is-playing .letter-intro-layout .letter-names,
+  .letter-overlay.is-playing .letter-envelope-wrap {
+    opacity: 0 !important;
+    animation: none !important;
+  }
+
+  .letter-overlay.opening .letter-fade-white,
+  .letter-overlay.closed .letter-fade-white {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
