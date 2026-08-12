@@ -25,10 +25,10 @@
   --color-text: #4a433c;
   --color-text-light: #7a7268;
   --shadow-carved: none;
-  --font-display: 'Crimson Pro', 'Palatino Linotype', Palatino, Georgia, serif;
-  --font-teodor: 'Cormorant Garamond', 'Palatino Linotype', Palatino, Georgia, serif;
-  --font-athelas: 'Crimson Pro', Georgia, serif;
-  --font-tamil-mn: 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Marcellus', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-teodor: 'Source Serif 4', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-athelas: 'Marcellus', Georgia, serif;
+  --font-tamil-mn: 'Source Serif 4', Georgia, serif;
   --font-body: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --fw-light: 400;
   --fw-regular: 400;
@@ -231,25 +231,32 @@ body {
 }
 
 .couple-names-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
   font-family: var(--font-athelas);
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0.08em;
-  line-height: inherit;
+  line-height: 1.2;
   color: inherit;
   text-transform: uppercase;
 }
 
 .couple-names-brand__part {
+  display: block;
   font-family: inherit;
   font-style: normal;
 }
 
 .couple-names-brand__amp {
+  display: block;
   font-family: var(--font-tamil-mn);
   font-style: italic;
   font-weight: 400;
-  margin: 0 0.18em;
+  margin: 0;
   text-transform: none;
   letter-spacing: 0;
 }
@@ -1729,11 +1736,12 @@ body {
 }
 
 .venues-schedule {
-  max-width: 34rem;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: clamp(2.5rem, 6vw, 4rem);
   padding-top: clamp(2rem, 4.5vw, 3rem);
 }
 
@@ -1742,11 +1750,56 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(0.65rem, 2vw, 0.95rem);
-  padding: 0 0.5rem;
+  gap: clamp(0.85rem, 2.5vw, 1.25rem);
+  padding: 0;
   margin: 0;
   border-bottom: none;
   position: relative;
+  width: 100%;
+}
+
+.venue-block--ceremonia,
+.venue-block--celebracion {
+  gap: clamp(0.85rem, 2.5vw, 1.25rem);
+}
+
+.venue-figure {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  line-height: 0;
+}
+
+.venue-figure__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+.venue-figure__info {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.35rem, 1.5vw, 0.55rem);
+  padding: 0 clamp(0.75rem, 3vw, 1.5rem);
+  margin: 0;
+  text-align: center;
+  line-height: var(--leading-relaxed);
+}
+
+.venue-block--ceremonia .venue-figure__info {
+  left: 52%;
+  right: 4%;
+}
+
+.venue-block--celebracion .venue-figure__info {
+  left: 4%;
+  right: 52%;
 }
 
 .venue-block:last-child {
@@ -1765,19 +1818,9 @@ body {
   margin: 0 0 0.15rem;
 }
 
-.venue-monument {
-  display: block;
-  font-size: clamp(1.75rem, 5vw, 2.15rem);
-  line-height: 1;
-  width: auto;
-  height: auto;
-  margin: 0 0 0.15rem;
-  color: var(--color-pompeian);
-  opacity: 0.85;
-}
-
 .venue-block .venue-title {
   margin: 0;
+  padding: 0 1.5rem;
   font-size: clamp(1.55rem, 1.9vw, 1.95rem);
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -1794,7 +1837,7 @@ body {
 
 .venue-block .venue-place {
   margin: 0;
-  max-width: 28rem;
+  max-width: none;
   text-transform: none;
   font-size: 1.05rem;
   letter-spacing: 0.02em;
@@ -1805,7 +1848,7 @@ body {
 }
 
 .venue-block .btn-map {
-  margin-top: 0.65rem;
+  margin-top: 0;
   margin-left: auto;
   margin-right: auto;
 }
@@ -2968,7 +3011,7 @@ body {
   font-weight: 500;
   font-style: normal;
   letter-spacing: 0.06em;
-  line-height: 1.35;
+  line-height: 1.25;
   color: var(--color-charcoal);
 }
 
@@ -3091,15 +3134,15 @@ body {
 
   .venues-schedule {
     padding-top: 2.5rem;
+    gap: 3rem;
   }
 
   .venue-block {
-    gap: 0.85rem;
-    padding-bottom: 2.75rem;
+    gap: 1rem;
   }
 
   .venue-block + .venue-block {
-    padding-top: 2.5rem;
+    padding-top: 0;
   }
 
   .venue-block .venue-time,
@@ -3389,6 +3432,7 @@ body {
 
   .venues-schedule {
     padding-top: clamp(1.75rem, 4vw, 2.5rem);
+    gap: clamp(2rem, 5vw, 3rem);
   }
 
   .story-text {
@@ -3403,26 +3447,32 @@ body {
   }
 
   .venue-block {
-    padding: 0 0.35rem;
-    gap: 0.7rem;
+    gap: 0.75rem;
   }
 
   .venue-block + .venue-block {
     padding-top: 0;
   }
 
-  .venue-block .venue-icon {
-    width: 1.45rem;
-    height: 1.45rem;
-  }
-
-  .venue-monument {
-    font-size: clamp(1.55rem, 6vw, 1.95rem);
-  }
-
   .venue-block .venue-title {
+    padding: 0 1.25rem;
     font-size: clamp(1.5rem, 5.5vw, 2rem);
     line-height: 1.15;
+  }
+
+  .venue-block--ceremonia .venue-figure__info {
+    left: 48%;
+    right: 2%;
+  }
+
+  .venue-block--celebracion .venue-figure__info {
+    left: 2%;
+    right: 48%;
+  }
+
+  .venue-figure__info {
+    gap: 0.3rem;
+    padding: 0 0.5rem;
   }
 
   .venue-block .venue-time {
@@ -3434,7 +3484,7 @@ body {
   }
 
   .venue-block .btn-map {
-    margin-top: 0.5rem;
+    margin-top: 0;
   }
 
   .rsvp > .container {

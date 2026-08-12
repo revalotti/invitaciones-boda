@@ -6,7 +6,7 @@
   <title>José Ángel & María Dolores — Invitación de Boda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Marcellus&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/thin/style.css">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -32,8 +32,8 @@
                 class="letter-envelope-img"
                 src="assets/Sobre-Fallback.png"
                 alt=""
-                width="998"
-                height="656"
+                width="1536"
+                height="1024"
                 decoding="async"
                 fetchpriority="high"
                 draggable="false"
@@ -43,7 +43,9 @@
             <p class="letter-hint">Toca para abrir</p>
             <p class="letter-names">
               <span class="couple-names-brand">
-                <span class="couple-names-brand__part">José Ángel</span> <span class="couple-names-brand__amp">&amp;</span> <span class="couple-names-brand__part">María Dolores</span>
+                <span class="couple-names-brand__part">José Ángel</span>
+                <span class="couple-names-brand__amp">&amp;</span>
+                <span class="couple-names-brand__part">María Dolores</span>
               </span>
             </p>
           </div>
@@ -98,8 +100,8 @@
         src="assets/jose-mdolores-arco.png"
         alt="José Ángel y María Dolores"
         class="story-photo__img"
-        width="819"
-        height="1005"
+        width="1122"
+        height="1381"
         decoding="async"
       >
     </figure>
@@ -130,30 +132,50 @@
         <h2 class="venues__intro-date" id="venuesDateHeading">10 de Octubre de 2026</h2>
         <div class="venues__intro-divider" aria-hidden="true"></div>
       </header>
+    </div>
 
-      <div class="venues-schedule">
-        <article class="venue-block">
-          <i class="ph-thin ph-church venue-monument" aria-hidden="true"></i>
-          <h3 class="venue-title">Ceremonia</h3>
-          <p class="venue-time">19:30h</p>
-          <p class="venue-place">Parroquia de San Juan Bautista</p>
-          <a href="https://maps.app.goo.gl/jrJZDFRAW2FskqKFA" target="_blank" rel="noopener" class="btn-map">
-            Cómo llegar <i class="ph-thin ph-arrow-right btn-map-icon" aria-hidden="true"></i>
-          </a>
-        </article>
+    <div class="venues-schedule">
+      <article class="venue-block venue-block--ceremonia">
+        <h3 class="venue-title">Ceremonia</h3>
+        <figure class="venue-figure">
+          <img
+            class="venue-figure__img"
+            src="assets/catedral.png"
+            alt=""
+            width="1672"
+            height="941"
+            decoding="async"
+          />
+          <figcaption class="venue-figure__info">
+            <p class="venue-time">19:30h</p>
+            <p class="venue-place">Parroquia de San Juan Bautista</p>
+          </figcaption>
+        </figure>
+        <a href="https://maps.app.goo.gl/jrJZDFRAW2FskqKFA" target="_blank" rel="noopener" class="btn-map">
+          Cómo llegar <i class="ph-thin ph-arrow-right btn-map-icon" aria-hidden="true"></i>
+        </a>
+      </article>
 
-        <div class="venues-schedule__divider" aria-hidden="true"></div>
-
-        <article class="venue-block">
-          <i class="ph-thin ph-champagne venue-monument" aria-hidden="true"></i>
-          <h3 class="venue-title">Celebración</h3>
-          <p class="venue-time">21:00h</p>
-          <p class="venue-place">Pabellón Municipal el Pilar</p>
-          <a href="https://www.google.com/maps/search/Pabell%C3%B3n+Municipal+el+Pilar+Hinojosa+del+Duque" target="_blank" rel="noopener" class="btn-map">
-            Cómo llegar <i class="ph-thin ph-arrow-right btn-map-icon" aria-hidden="true"></i>
-          </a>
-        </article>
-      </div>
+      <article class="venue-block venue-block--celebracion">
+        <h3 class="venue-title">Celebración</h3>
+        <figure class="venue-figure">
+          <img
+            class="venue-figure__img"
+            src="assets/banquete.png"
+            alt=""
+            width="1672"
+            height="941"
+            decoding="async"
+          />
+          <figcaption class="venue-figure__info">
+            <p class="venue-time">21:00h</p>
+            <p class="venue-place">Pabellón Municipal el Pilar</p>
+          </figcaption>
+        </figure>
+        <a href="https://www.google.com/maps/search/Pabell%C3%B3n+Municipal+el+Pilar+Hinojosa+del+Duque" target="_blank" rel="noopener" class="btn-map">
+          Cómo llegar <i class="ph-thin ph-arrow-right btn-map-icon" aria-hidden="true"></i>
+        </a>
+      </article>
     </div>
   </section>
 
@@ -373,7 +395,9 @@
       <p class="footer-line">Con amor</p>
       <p class="footer-line footer-line--names">
         <span class="couple-names-brand">
-          <span class="couple-names-brand__part">José Ángel</span> <span class="couple-names-brand__amp">&amp;</span> <span class="couple-names-brand__part">María Dolores</span>
+          <span class="couple-names-brand__part">José Ángel</span>
+          <span class="couple-names-brand__amp">&amp;</span>
+          <span class="couple-names-brand__part">María Dolores</span>
         </span>
       </p>
       <hr class="footer-divider" aria-hidden="true">
