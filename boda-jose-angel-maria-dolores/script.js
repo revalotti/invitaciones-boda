@@ -150,9 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const invitationMain = document.getElementById('invitationMain');
   const heroCtaBtn = document.querySelector('.hero-cta-btn');
   const storySection = document.querySelector('.story');
-  const storyTextTyped = document.getElementById('storyTextTyped');
-  let storyTypingStarted = false;
-  let storyTypingTimeoutId = null;
+  const storyQuote = document.getElementById('storyQuote');
+  const storyQuoteIt = storyQuote?.querySelector('.story-quote__line--it');
+  const storyQuoteEs = storyQuote?.querySelector('.story-quote__line--es');
+  let storyTranslateStarted = false;
+  let storyTranslateTimeoutId = null;
+  let storyShowingSpanish = false;
+  let storyQuotePaused = true;
   let letterFadeTimeoutId = null;
   let letterCloseTimeoutId = null;
 
@@ -196,14 +200,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (heroCtaBtn) heroCtaBtn.classList.remove('hidden');
 
-    storyTypingStarted = false;
-    if (storyTypingTimeoutId) {
-      clearTimeout(storyTypingTimeoutId);
-      storyTypingTimeoutId = null;
+    storyTranslateStarted = false;
+    storyShowingSpanish = false;
+    storyQuotePaused = true;
+    if (storyTranslateTimeoutId) {
+      clearTimeout(storyTranslateTimeoutId);
+      storyTranslateTimeoutId = null;
     }
-    if (storyTextTyped) {
-      storyTextTyped.textContent = '';
-      storyTextTyped.classList.remove('is-typing');
+    if (storyQuoteIt && storyQuoteEs) {
+      storyQuoteIt.classList.add('is-active');
+      storyQuoteIt.classList.remove('is-leaving');
+      storyQuoteIt.removeAttribute('aria-hidden');
+      storyQuoteEs.classList.remove('is-active', 'is-leaving');
+      storyQuoteEs.setAttribute('aria-hidden', 'true');
     }
     if (storySection) storySection.classList.remove('in-view');
 
@@ -286,51 +295,78 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(historiaSection);
   }
 
-  // Nuestra historia: texto con efecto de escritura suave
-  const runStoryTyping = () => {
-    if (!storyTextTyped || storyTypingStarted) return;
-    storyTypingStarted = true;
+  // Nuestra historia: italiano → español con ritmo asimétrico (menos mecánico)
+  const STORY_HOLD_IT_MS = 3600;
+  const STORY_HOLD_ES_MS = 8200;
 
-    const fullText = storyTextTyped.dataset.fullText || '';
-    storyTextTyped.textContent = '';
-    storyTextTyped.classList.add('is-typing');
+  const clearStoryTranslateTimer = () => {
+    if (storyTranslateTimeoutId) {
+      clearTimeout(storyTranslateTimeoutId);
+      storyTranslateTimeoutId = null;
+    }
+  };
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      storyTextTyped.textContent = fullText;
-      storyTextTyped.classList.remove('is-typing');
+  const setStoryQuoteLang = (showSpanish) => {
+    if (!storyQuoteIt || !storyQuoteEs) return;
+    storyShowingSpanish = showSpanish;
+
+    if (showSpanish) {
+      storyQuoteIt.classList.remove('is-active');
+      storyQuoteIt.classList.add('is-leaving');
+      storyQuoteIt.setAttribute('aria-hidden', 'true');
+      storyQuoteEs.classList.remove('is-leaving');
+      storyQuoteEs.classList.add('is-active');
+      storyQuoteEs.removeAttribute('aria-hidden');
       return;
     }
 
-    if (storyTypingTimeoutId) {
-      clearTimeout(storyTypingTimeoutId);
-      storyTypingTimeoutId = null;
+    storyQuoteEs.classList.remove('is-active');
+    storyQuoteEs.classList.add('is-leaving');
+    storyQuoteEs.setAttribute('aria-hidden', 'true');
+    storyQuoteIt.classList.remove('is-leaving');
+    storyQuoteIt.classList.add('is-active');
+    storyQuoteIt.removeAttribute('aria-hidden');
+  };
+
+  const scheduleStoryStep = (fn, delay) => {
+    clearStoryTranslateTimer();
+    storyTranslateTimeoutId = setTimeout(fn, delay);
+  };
+
+  const continueStoryCycle = () => {
+    if (storyQuotePaused || !storyQuoteIt || !storyQuoteEs) return;
+
+    const holdMs = storyShowingSpanish ? STORY_HOLD_ES_MS : STORY_HOLD_IT_MS;
+
+    scheduleStoryStep(() => {
+      if (storyQuotePaused) return;
+      setStoryQuoteLang(!storyShowingSpanish);
+      continueStoryCycle();
+    }, holdMs);
+  };
+
+  const startStoryTranslate = () => {
+    if (!storyQuoteIt || !storyQuoteEs) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!storyTranslateStarted) {
+        storyTranslateStarted = true;
+        setStoryQuoteLang(true);
+        storyQuoteIt.classList.remove('is-leaving');
+      }
+      return;
     }
 
-    let index = 0;
+    if (storyQuotePaused) {
+      storyQuotePaused = false;
+      storyTranslateStarted = true;
+      continueStoryCycle();
+    }
+  };
 
-    const getCharDelay = (char, prevChar) => {
-      if (char === ' ') return 34;
-      if ('.…!?'.includes(char)) return 280;
-      if (',;:'.includes(char)) return 160;
-      if (prevChar === ' ' || prevChar === '.' || prevChar === ',') return 52;
-      return 38 + Math.random() * 18;
-    };
-
-    const typeNextChar = () => {
-      if (index >= fullText.length) {
-        storyTextTyped.classList.remove('is-typing');
-        storyTypingTimeoutId = null;
-        return;
-      }
-
-      index += 1;
-      storyTextTyped.textContent = fullText.slice(0, index);
-      const char = fullText[index - 1];
-      const prevChar = index > 1 ? fullText[index - 2] : '';
-      storyTypingTimeoutId = setTimeout(typeNextChar, getCharDelay(char, prevChar));
-    };
-
-    storyTypingTimeoutId = setTimeout(typeNextChar, 420);
+  const pauseStoryTranslate = () => {
+    storyQuotePaused = true;
+    clearStoryTranslateTimer();
   };
 
   if (storySection) {
@@ -338,7 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
       (entries) => {
         entries.forEach((entry) => {
           storySection.classList.toggle('in-view', entry.isIntersecting);
-          if (entry.isIntersecting) runStoryTyping();
+          if (entry.isIntersecting) startStoryTranslate();
+          else pauseStoryTranslate();
         });
       },
       { threshold: 0.35 }
@@ -404,6 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const rsvpAlergiaNinguna = document.getElementById('rsvpAlergiaNinguna');
   const rsvpAlergia = document.getElementById('rsvpAlergia');
   const rsvpAllergyValid = document.getElementById('rsvpAllergyValid');
+  const rsvpStayNote = document.getElementById('rsvpStayNote');
 
   const ALLERGY_LABELS = {
     ninguna: 'Ninguna',
@@ -515,14 +553,148 @@ document.addEventListener('DOMContentLoaded', () => {
     return rsvpForm?.querySelector('input[name="tipo_grupo"]:checked')?.value || 'solo';
   }
 
+  function getStayNeedValue() {
+    return rsvpForm?.querySelector('input[name="alojamiento"]:checked')?.value || '';
+  }
+
+  function updateStayNoteState() {
+    const showNote = getAttendanceValue() === 'si' && getStayNeedValue() === 'si';
+    if (rsvpStayNote) rsvpStayNote.hidden = !showNote;
+  }
+
+  function resetStayFields() {
+    rsvpForm?.querySelectorAll('input[name="alojamiento"]').forEach((radio) => {
+      radio.checked = false;
+    });
+    updateStayNoteState();
+  }
+
   function getGuestRows() {
     return Array.from(rsvpGuestList?.querySelectorAll('.guest-row') || []);
+  }
+
+  const GUEST_TYPE_OPTIONS = [
+    { value: 'adulto', label: 'Adulto' },
+    { value: 'nino', label: 'Niño' }
+  ];
+
+  function getGuestTypeValue(row) {
+    return row?.querySelector('.guest-type-select')?.dataset.value || 'adulto';
+  }
+
+  function closeAllGuestTypeSelects(except) {
+    document.querySelectorAll('.guest-type-select.is-open').forEach((select) => {
+      if (except && select === except) return;
+      select.classList.remove('is-open', 'is-drop-up');
+      const trigger = select.querySelector('.guest-type-select__trigger');
+      const menu = select.querySelector('.guest-type-select__menu');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      if (menu) menu.hidden = true;
+    });
+  }
+
+  function setGuestTypeValue(select, value) {
+    if (!select) return;
+    const option = GUEST_TYPE_OPTIONS.find((item) => item.value === value) || GUEST_TYPE_OPTIONS[0];
+    select.dataset.value = option.value;
+    const label = select.querySelector('.guest-type-select__value');
+    if (label) label.textContent = option.label;
+    select.querySelectorAll('.guest-type-select__option').forEach((btn) => {
+      const selected = btn.dataset.value === option.value;
+      btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+  }
+
+  function initGuestTypeSelect(select) {
+    if (!select || select.dataset.ready === 'true') return;
+    select.dataset.ready = 'true';
+
+    const trigger = select.querySelector('.guest-type-select__trigger');
+    const menu = select.querySelector('.guest-type-select__menu');
+    const options = Array.from(select.querySelectorAll('.guest-type-select__option'));
+    if (!trigger || !menu) return;
+
+    const openMenu = () => {
+      if (trigger.disabled) return;
+      closeAllGuestTypeSelects(select);
+      select.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+      menu.hidden = false;
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - triggerRect.bottom;
+      const preferUp = spaceBelow < 140 && triggerRect.top > spaceBelow;
+      select.classList.toggle('is-drop-up', preferUp);
+
+      const selected = options.find((btn) => btn.getAttribute('aria-selected') === 'true') || options[0];
+      selected?.focus();
+    };
+
+    const closeMenu = ({ focusTrigger = false } = {}) => {
+      select.classList.remove('is-open', 'is-drop-up');
+      trigger.setAttribute('aria-expanded', 'false');
+      menu.hidden = true;
+      if (focusTrigger) trigger.focus();
+    };
+
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (select.classList.contains('is-open')) closeMenu();
+      else openMenu();
+    });
+
+    trigger.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openMenu();
+      }
+    });
+
+    options.forEach((btn, index) => {
+      btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        setGuestTypeValue(select, btn.dataset.value || 'adulto');
+        closeMenu({ focusTrigger: true });
+      });
+
+      btn.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          options[(index + 1) % options.length]?.focus();
+        } else if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          options[(index - 1 + options.length) % options.length]?.focus();
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          options[0]?.focus();
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          options[options.length - 1]?.focus();
+        } else if (event.key === 'Escape') {
+          event.preventDefault();
+          closeMenu({ focusTrigger: true });
+        } else if (event.key === 'Tab') {
+          closeMenu();
+        }
+      });
+    });
+  }
+
+  if (!window.__guestTypeSelectListenersBound) {
+    window.__guestTypeSelectListenersBound = true;
+    document.addEventListener('click', (event) => {
+      if (event.target.closest('.guest-type-select')) return;
+      closeAllGuestTypeSelects();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeAllGuestTypeSelects();
+    });
   }
 
   function collectExtraGuests() {
     const guests = getGuestRows().map((row) => {
       const name = normalizeNamePart(row.querySelector('.guest-row__name')?.value || '');
-      const type = row.querySelector('.guest-row__type')?.value || 'adulto';
+      const type = getGuestTypeValue(row);
       return { name, type };
     }).filter((g) => g.name);
 
@@ -559,6 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const index = getGuestRows().length;
     const nameId = `rsvpGuestName${index}`;
     const typeId = `rsvpGuestType${index}`;
+    const listboxId = `${typeId}List`;
     const row = document.createElement('tr');
     row.className = 'guest-row';
     row.innerHTML = `
@@ -574,11 +747,31 @@ document.addEventListener('DOMContentLoaded', () => {
         >
       </td>
       <td class="guest-table__cell guest-table__cell--type">
-        <label class="visually-hidden" for="${typeId}">Adulto o niño, acompañante ${index + 1}</label>
-        <select class="guest-row__type" id="${typeId}">
-          <option value="adulto">Adulto</option>
-          <option value="nino">Niño</option>
-        </select>
+        <span class="visually-hidden" id="${typeId}Label">Adulto o niño, acompañante ${index + 1}</span>
+        <div class="guest-type-select" data-value="adulto">
+          <button
+            type="button"
+            class="guest-type-select__trigger guest-row__type"
+            id="${typeId}"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-labelledby="${typeId}Label ${typeId}"
+            aria-controls="${listboxId}"
+          >
+            <span class="guest-type-select__value">Adulto</span>
+            <svg class="guest-type-select__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <ul class="guest-type-select__menu" id="${listboxId}" role="listbox" aria-labelledby="${typeId}Label" hidden>
+            <li role="presentation">
+              <button type="button" class="guest-type-select__option" role="option" data-value="adulto" aria-selected="true">Adulto</button>
+            </li>
+            <li role="presentation">
+              <button type="button" class="guest-type-select__option" role="option" data-value="nino" aria-selected="false">Niño</button>
+            </li>
+          </ul>
+        </div>
       </td>
       <td class="guest-table__cell guest-table__cell--action">
         <button type="button" class="guest-row__remove">Quitar</button>
@@ -586,16 +779,19 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     const nameInput = row.querySelector('.guest-row__name');
-    const typeSelect = row.querySelector('.guest-row__type');
+    const typeSelect = row.querySelector('.guest-type-select');
     const removeBtn = row.querySelector('.guest-row__remove');
     if (removeBtn) {
       removeBtn.setAttribute('aria-label', `Quitar acompañante ${index + 1}`);
     }
 
+    initGuestTypeSelect(typeSelect);
+
     nameInput?.addEventListener('input', () => {
       nameInput.setCustomValidity('');
     });
     removeBtn?.addEventListener('click', () => {
+      closeAllGuestTypeSelects();
       if (getGuestRows().length <= 1) {
         const soloRadio = rsvpForm?.querySelector('input[name="tipo_grupo"][value="solo"]');
         if (soloRadio) soloRadio.checked = true;
@@ -615,6 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function clearGuestList() {
+    closeAllGuestTypeSelects();
     if (rsvpGuestList) rsvpGuestList.innerHTML = '';
     updateAddGuestButton();
   }
@@ -633,14 +830,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     getGuestRows().forEach((row) => {
       const nameInput = row.querySelector('.guest-row__name');
-      const typeSelect = row.querySelector('.guest-row__type');
+      const typeTrigger = row.querySelector('.guest-type-select__trigger');
       const removeBtn = row.querySelector('.guest-row__remove');
       const disabled = !isAttending || !withGuests;
       if (nameInput) {
         nameInput.disabled = disabled;
         nameInput.required = !disabled;
       }
-      if (typeSelect) typeSelect.disabled = disabled;
+      if (typeTrigger) typeTrigger.disabled = disabled;
+      if (disabled) closeAllGuestTypeSelects();
       if (removeBtn) removeBtn.disabled = disabled;
     });
 
@@ -764,11 +962,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (soloRadio) soloRadio.checked = true;
       clearGuestList();
       resetAllergyFields();
+      resetStayFields();
       const cancion = rsvpForm?.querySelector('#rsvpCancion');
       if (cancion) cancion.value = '';
     }
 
     updatePartyPanelState();
+    updateStayNoteState();
     updateAllergyState();
 
     if (attendance && attendance !== lastAttendanceChoice) {
@@ -787,6 +987,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     rsvpForm.querySelectorAll('input[name="tipo_grupo"]').forEach((radio) => {
       radio.addEventListener('change', updatePartyPanelState);
+    });
+
+    rsvpForm.querySelectorAll('input[name="alojamiento"]').forEach((radio) => {
+      radio.addEventListener('change', updateStayNoteState);
     });
 
     if (rsvpAddGuest) {
@@ -852,6 +1056,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nombres_acompanantes: isAttending ? guestListText : '',
         sin_alergias: isAttending && allergy.hasNinguna ? 'Sí' : 'No',
         alergias_seleccionadas: isAttending ? allergy.formatted : '',
+        alojamiento: isAttending ? (getStayNeedValue() === 'si' ? 'Sí' : 'No') : '',
         cancion: isAttending ? String(formData.get('cancion') || '').trim() : '',
         mensaje: String(formData.get('mensaje') || '').trim(),
         fecha_envio: new Date().toISOString()

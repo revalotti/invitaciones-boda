@@ -90,9 +90,16 @@
   <!-- Nuestra historia -->
   <section class="story story--light" id="historia">
     <div class="cenefa cenefa--meandro-t" aria-hidden="true"></div>
-    <div class="container story__intro">
-      <h2 class="story-section-heading">
-        &ldquo;Hay amores que no se anuncian: se reconocen, se eligen y se acompañan.&rdquo;
+    <div class="story__intro">
+      <h2 class="story-section-heading" id="storyQuote">
+        <span class="story-quote">
+          <span class="story-quote__line story-quote__line--it is-active" lang="it">
+            &ldquo;Insieme è il posto più bello&rdquo;
+          </span>
+          <span class="story-quote__line story-quote__line--es" lang="es" aria-hidden="true">
+            &ldquo;Juntos es el lugar más hermoso&rdquo;
+          </span>
+        </span>
       </h2>
     </div>
     <figure class="story-photo">
@@ -206,21 +213,21 @@
           <div class="form-group">
             <label for="rsvpNombre">Nombre <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
             <div class="input-wrap input-wrap--single">
-              <input type="text" id="rsvpNombre" name="nombre" required autocomplete="given-name" placeholder="Ej. María">
+              <input type="text" id="rsvpNombre" name="nombre" required autocomplete="given-name" placeholder="Ej. José Ángel">
             </div>
           </div>
 
           <div class="form-group">
             <label for="rsvpApellidos">Apellidos <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
             <div class="input-wrap input-wrap--single">
-              <input type="text" id="rsvpApellidos" name="apellidos" required autocomplete="family-name" placeholder="Ej. García">
+              <input type="text" id="rsvpApellidos" name="apellidos" required autocomplete="family-name" placeholder="Ej. Revaliente López">
             </div>
           </div>
 
           <div class="form-group form-group--last">
             <label for="rsvpEmail">Correo electrónico <span class="rsvp-required-mark" aria-hidden="true">*</span></label>
             <div class="input-wrap input-wrap--single">
-              <input type="email" id="rsvpEmail" name="email" required autocomplete="email" inputmode="email" placeholder="maria.garcia@ejemplo.com">
+              <input type="email" id="rsvpEmail" name="email" required autocomplete="email" inputmode="email" placeholder="joseangel.revaliente@ejemplo.com">
             </div>
           </div>
         </div>
@@ -342,7 +349,42 @@
               </div>
               <input type="text" class="allergy-valid-anchor" id="rsvpAllergyValid" tabindex="-1" aria-hidden="true" value="">
             </fieldset>
+          </div>
 
+          <div class="rsvp-form__subsection rsvp-form__subsection--stay">
+            <h3 class="rsvp-form__block-title">
+              <span class="rsvp-form__block-icon" aria-hidden="true"><i class="ph-thin ph-bed"></i></span>
+              <span class="rsvp-form__block-text">¿Necesitáis alojamiento? <span class="rsvp-required-mark" aria-hidden="true">*</span></span>
+            </h3>
+            <fieldset class="form-group form-group--tight">
+              <legend class="visually-hidden">¿Necesitáis alojamiento?</legend>
+              <div class="radio-group radio-group--inline radio-group--party">
+                <label class="radio-option radio-option--card">
+                  <input type="radio" name="alojamiento" value="si" required>
+                  <span class="radio-option__title">Sí</span>
+                </label>
+                <label class="radio-option radio-option--card">
+                  <input type="radio" name="alojamiento" value="no">
+                  <span class="radio-option__title">No</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <aside class="rsvp-stay-note" id="rsvpStayNote" aria-label="Cómo reservar habitación" hidden>
+              <span class="rsvp-stay-note__icon" aria-hidden="true"><i class="ph-thin ph-phone"></i></span>
+              <div class="rsvp-stay-note__body">
+                <p class="rsvp-stay-note__title">Cómo reservar</p>
+                <p class="rsvp-stay-note__text">
+                  Llamad al
+                  <a class="rsvp-stay-note__link" href="tel:+34957140443">957&nbsp;140&nbsp;443</a>
+                  e indicad que sois de la «Boda de Mª&nbsp;Dolores y José&nbsp;Ángel» para el descuento.
+                  Esa misma semana revisamos la lista por si alguien se despista.
+                </p>
+              </div>
+            </aside>
+          </div>
+
+          <div class="rsvp-form__subsection">
             <div class="form-group form-group--last">
               <h3 class="rsvp-form__block-title rsvp-form__block-title--compact">
                 <span class="rsvp-form__block-icon" aria-hidden="true"><i class="ph-thin ph-music-notes"></i></span>
