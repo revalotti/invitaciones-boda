@@ -856,11 +856,20 @@ body {
     max(1.15rem, env(safe-area-inset-bottom, 0px));
   gap: 0.85rem;
   box-sizing: border-box;
+  /* Soften the busy ruins behind the bronze title so letterforms stay readable */
   background:
+    radial-gradient(
+      ellipse 78% 92% at 50% 38%,
+      rgba(235, 227, 212, 0.78) 0%,
+      rgba(235, 227, 212, 0.48) 42%,
+      rgba(235, 227, 212, 0.16) 68%,
+      transparent 82%
+    ),
     linear-gradient(
       180deg,
-      rgba(28, 22, 19, 0.16) 0%,
-      transparent 30%
+      rgba(235, 227, 212, 0.55) 0%,
+      rgba(235, 227, 212, 0.22) 38%,
+      transparent 72%
     );
 }
 
@@ -895,6 +904,11 @@ body {
   max-height: calc(100dvh - 2.5rem);
   object-fit: contain;
   object-position: center;
+  /* Halo + edge separation so bronze strokes never dissolve into stone detail */
+  filter:
+    drop-shadow(0 0 0.55rem rgba(235, 227, 212, 0.95))
+    drop-shadow(0 0 1.35rem rgba(235, 227, 212, 0.7))
+    drop-shadow(0 1px 1px rgba(28, 22, 19, 0.22));
 }
 
 /* Botón hero — anclado al borde inferior del marco del título */
@@ -996,6 +1010,21 @@ body {
     padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
     padding-bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
     gap: 0;
+    background:
+      radial-gradient(
+        ellipse 70% 95% at 50% 50%,
+        rgba(235, 227, 212, 0.8) 0%,
+        rgba(235, 227, 212, 0.45) 48%,
+        rgba(235, 227, 212, 0.12) 72%,
+        transparent 86%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(235, 227, 212, 0.28) 0%,
+        transparent 22%,
+        transparent 78%,
+        rgba(235, 227, 212, 0.28) 100%
+      );
   }
 
   .hero-title {
@@ -1741,7 +1770,7 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(2.5rem, 6vw, 4rem);
+  gap: clamp(4rem, 9vw, 6.5rem);
   padding-top: clamp(2rem, 4.5vw, 3rem);
 }
 
@@ -1761,6 +1790,10 @@ body {
 .venue-block--ceremonia,
 .venue-block--celebracion {
   gap: clamp(0.85rem, 2.5vw, 1.25rem);
+}
+
+.venue-block > .cenefa {
+  margin-bottom: clamp(0.35rem, 1.5vw, 0.75rem);
 }
 
 .venue-figure {
@@ -2702,13 +2735,23 @@ body {
   min-height: 2.85rem;
   border: 1px solid rgba(139, 58, 47, 0.2);
   border-radius: var(--radius-sm);
-  background: var(--color-cream);
+  background: var(--color-white);
   transition: var(--transition);
 }
 
 .checkbox-option--tile:has(input:checked) {
   border-color: var(--color-gold);
-  background: var(--color-white);
+  background: var(--color-hueso);
+}
+
+.checkbox-option--tile:has(input:focus-visible) {
+  border-width: 2px;
+  border-color: var(--color-gold);
+}
+
+.checkbox-option--tile:has(input:focus) {
+  border-width: 2px;
+  border-color: var(--color-gold);
 }
 
 .checkbox-option--tile:has(input:checked) .checkbox-option__text {
@@ -2723,12 +2766,13 @@ body {
 .allergy-other-tile {
   border: 1px solid rgba(139, 58, 47, 0.2);
   border-radius: var(--radius-sm);
-  background: var(--color-cream);
+  background: var(--color-white);
   transition: var(--transition);
 }
 
 .allergy-other-tile:focus-within,
 .allergy-other-tile:has(.allergy-other-tile__input:not(:placeholder-shown)) {
+  border-width: 2px;
   border-color: var(--color-gold);
   background: var(--color-white);
 }
@@ -2857,7 +2901,7 @@ body {
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   line-height: 1.5;
-  background: var(--color-cream);
+  background: var(--color-white);
   transition: var(--transition);
 }
 
@@ -2898,7 +2942,7 @@ body {
   width: auto;
   padding: 0;
   border: 1px solid rgba(139, 58, 47, 0.2);
-  background: var(--color-cream);
+  background: var(--color-white);
   color: var(--color-text-light);
   cursor: pointer;
   display: none;
@@ -2925,6 +2969,7 @@ body {
 .input-wrap textarea:focus {
   outline: none;
   border-color: var(--color-gold);
+  border-width: 2px;
   background: var(--color-white);
 }
 
@@ -2932,6 +2977,7 @@ body {
 .input-wrap--select select:focus {
   outline: none;
   border-color: var(--color-gold);
+  border-width: 2px;
 }
 
 .radio-group {
@@ -2948,7 +2994,7 @@ body {
   padding: 0.9rem 1rem;
   border: 1px solid rgba(139, 58, 47, 0.2);
   border-radius: var(--radius-sm);
-  background: var(--color-cream);
+  background: var(--color-white);
   transition: var(--transition);
 }
 
@@ -2958,7 +3004,17 @@ body {
 
 .radio-option:has(input:checked) {
   border-color: var(--color-gold);
-  background: var(--color-white);
+  background: var(--color-hueso);
+}
+
+.radio-option:has(input:focus-visible) {
+  border-width: 2px;
+  border-color: var(--color-gold);
+}
+
+.radio-option:has(input:focus) {
+  border-width: 2px;
+  border-color: var(--color-gold);
 }
 
 .radio-option input {
@@ -3134,7 +3190,7 @@ body {
 
   .venues-schedule {
     padding-top: 2.5rem;
-    gap: 3rem;
+    gap: 4.75rem;
   }
 
   .venue-block {
@@ -3432,7 +3488,7 @@ body {
 
   .venues-schedule {
     padding-top: clamp(1.75rem, 4vw, 2.5rem);
-    gap: clamp(2rem, 5vw, 3rem);
+    gap: clamp(3.25rem, 8vw, 4.75rem);
   }
 
   .story-text {
