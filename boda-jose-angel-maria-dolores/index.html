@@ -15,9 +15,6 @@
   <div
     class="letter-overlay"
     id="letterOverlay"
-    role="button"
-    tabindex="0"
-    aria-label="Toca la carta para abrir la invitación"
   >
     <div class="letter-envelope-full">
       <div class="letter-photo-stage">
@@ -40,7 +37,9 @@
                 aria-hidden="true"
               >
             </div>
-            <p class="letter-hint">Toca para abrir</p>
+            <button type="button" class="letter-hint" id="letterOpenBtn">
+              Toca para abrir
+            </button>
             <p class="letter-names">
               <span class="couple-names-brand">
                 <span class="couple-names-brand__part">José Ángel</span>
@@ -136,7 +135,7 @@
     <div class="container container--wide">
       <header class="venues__intro">
         <p class="venues__intro-kicker">Os esperamos el</p>
-        <h2 class="venues__intro-date" id="venuesDateHeading">10 de Octubre de 2026</h2>
+        <h2 class="venues__intro-date" id="venuesDateHeading">10&nbsp;de&nbsp;Octubre de&nbsp;2026</h2>
         <div class="venues__intro-divider" aria-hidden="true"></div>
       </header>
     </div>
@@ -156,7 +155,7 @@
           />
           <figcaption class="venue-figure__info">
             <p class="venue-time">19:30h</p>
-            <p class="venue-place">Parroquia de San Juan Bautista</p>
+            <p class="venue-place">Parroquia&nbsp;de San&nbsp;Juan&nbsp;Bautista</p>
           </figcaption>
         </figure>
         <a href="https://maps.app.goo.gl/jrJZDFRAW2FskqKFA" target="_blank" rel="noopener" class="btn-map">
@@ -178,7 +177,7 @@
           />
           <figcaption class="venue-figure__info">
             <p class="venue-time">21:00h</p>
-            <p class="venue-place">Pabellón Municipal el Pilar</p>
+            <p class="venue-place">Pabellón&nbsp;Municipal el&nbsp;Pilar</p>
           </figcaption>
         </figure>
         <a href="https://www.google.com/maps/search/Pabell%C3%B3n+Municipal+el+Pilar+Hinojosa+del+Duque" target="_blank" rel="noopener" class="btn-map">

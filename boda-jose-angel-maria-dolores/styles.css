@@ -296,7 +296,7 @@ html.is-letter-locked body {
   color: var(--color-text-light);
   letter-spacing: 0.1em;
   text-align: center;
-  margin: 0;
+  margin: 0.85rem 0 0;
   padding: 0.2rem 0.5rem 0;
   border-top: none;
   flex-shrink: 0;
@@ -400,6 +400,11 @@ html.is-letter-locked body {
 }
 
 .letter-hint {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
   font-size: clamp(0.98rem, 2.2vw, 1.12rem);
   font-weight: 600;
@@ -416,7 +421,41 @@ html.is-letter-locked body {
   max-width: min(22rem, 92vw);
   flex-shrink: 0;
   box-shadow: none;
-  pointer-events: none;
+  cursor: pointer;
+  transition: var(--transition);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.15);
+}
+
+.letter-hint:hover,
+.letter-overlay:hover:not(.is-playing):not(.opening):not(.closed) .letter-hint {
+  background: var(--color-btn-hover);
+  border-color: var(--color-btn-hover);
+  transform: none;
+  box-shadow: none;
+}
+
+.letter-hint:active,
+.letter-overlay:active:not(.is-playing):not(.opening):not(.closed) .letter-hint {
+  transform: translateY(0);
+}
+
+.letter-hint:focus-visible {
+  outline: 2px solid var(--color-btn);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+.letter-hint:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.letter-hint:disabled {
+  color: var(--color-hueso);
+  background: var(--color-btn);
+  border-color: var(--color-btn);
+  cursor: default;
+  opacity: 1;
 }
 
 .letter-intro-layout .letter-hint {
@@ -3831,6 +3870,11 @@ html.is-letter-locked body {
   .venues__intro-date {
     font-size: clamp(1.75rem, 7vw, 2.55rem);
     line-height: var(--leading-display);
+    text-wrap: balance;
+  }
+
+  .venue-block .venue-place {
+    text-wrap: balance;
   }
 
   .venues-schedule {

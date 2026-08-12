@@ -206,7 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (letterOverlay) {
       letterOverlay.classList.remove('seal-break', 'opening', 'closed', 'is-playing');
       letterOverlay.removeAttribute('aria-hidden');
-      letterOverlay.setAttribute('tabindex', '0');
+      const letterOpenBtn = document.getElementById('letterOpenBtn');
+      if (letterOpenBtn) letterOpenBtn.disabled = false;
     }
 
     clearLetterTimers();
@@ -283,14 +284,16 @@ document.addEventListener('DOMContentLoaded', () => {
       letterHeroEnterTimeoutId = null;
     };
 
+    const letterOpenBtn = document.getElementById('letterOpenBtn');
+
     const finishLetterOverlay = () => {
       letterOverlay.classList.add('closed');
       letterOverlay.setAttribute('aria-hidden', 'true');
-      letterOverlay.setAttribute('tabindex', '-1');
+      if (letterOpenBtn) letterOpenBtn.disabled = true;
       document.documentElement.classList.remove('is-letter-locked');
 
-      if (typeof letterOverlay.blur === 'function') {
-        letterOverlay.blur();
+      if (letterOpenBtn && typeof letterOpenBtn.blur === 'function') {
+        letterOpenBtn.blur();
       }
 
       if (!invitationMain.hasAttribute('tabindex')) {
@@ -329,18 +332,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       scrollToTop();
       letterOverlay.classList.add('seal-break', 'is-playing');
+      if (letterOpenBtn) letterOpenBtn.disabled = true;
       invitationMain.classList.add('visible', 'opened');
       startInvitationMusic();
       scheduleLetterTransition();
     };
 
+    // Clic en cualquier parte del overlay (el botón burbujea y también abre)
     letterOverlay.addEventListener('click', openLetter);
-    letterOverlay.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openLetter();
-      }
-    });
   }
 
   // Smooth scroll for anchor links
