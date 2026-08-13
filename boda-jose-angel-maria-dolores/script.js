@@ -3,12 +3,12 @@ if ('scrollRestoration' in history) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Countdown to wedding (10 Oct 2026, 19:30)
+  // Countdown to wedding (10 Oct 2026, 13:00)
   const countdownRoot = document.getElementById('countdownStrip');
   const countdownEl = document.getElementById('countdown');
   const countdownFallback = document.getElementById('countdownFallback');
   if (countdownRoot && countdownEl) {
-    const weddingDate = new Date(countdownRoot.dataset.wedding || '2026-10-10T19:30:00');
+    const weddingDate = new Date(countdownRoot.dataset.wedding || '2026-10-10T13:00:00');
     const daysEl = document.getElementById('countdownDays');
     const hoursEl = document.getElementById('countdownHours');
     const minutesEl = document.getElementById('countdownMinutes');
@@ -342,14 +342,59 @@ document.addEventListener('DOMContentLoaded', () => {
     letterOverlay.addEventListener('click', openLetter);
   }
 
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const href = this.getAttribute('href');
-      if (href === '#') return;
-      e.preventDefault();
+  // Smooth scroll for anchor links + highlight de contacto
+  let contactHighlightTimer = 0;
+
+  function isMotionReduced() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function highlightFooterContactPhones() {
+    const phones = document.querySelectorAll('#contacto .footer-contact__phone');
+    if (!phones.length) return;
+
+    phones.forEach((phone) => {
+      phone.classList.remove('is-attention');
+      void phone.offsetWidth;
+      phone.classList.add('is-attention');
+    });
+
+    window.clearTimeout(contactHighlightTimer);
+    contactHighlightTimer = window.setTimeout(() => {
+      phones.forEach((phone) => phone.classList.remove('is-attention'));
+    }, 1600);
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (event) => {
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#') return;
+
       const target = document.querySelector(href);
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
+      if (!target) return;
+
+      event.preventDefault();
+
+      const reduceMotion = isMotionReduced();
+
+      if (href === '#contacto') {
+        // `end` encaja el footer abajo del viewport; evita el salto de alinear su top arriba
+        target.scrollIntoView({
+          behavior: reduceMotion ? 'auto' : 'smooth',
+          block: 'end'
+        });
+        window.clearTimeout(contactHighlightTimer);
+        contactHighlightTimer = window.setTimeout(
+          highlightFooterContactPhones,
+          reduceMotion ? 80 : 700
+        );
+        return;
+      }
+
+      target.scrollIntoView({
+        behavior: reduceMotion ? 'auto' : 'smooth',
+        block: 'start'
+      });
     });
   });
 

@@ -107,14 +107,14 @@
         alt="José Ángel y María Dolores"
         class="story-photo__img"
         width="1122"
-        height="1381"
+        height="1380"
         decoding="async"
       >
     </figure>
   </section>
 
   <!-- Cuenta atrás -->
-  <section class="countdown-strip" id="countdownStrip" data-wedding="2026-10-10T19:30:00" aria-labelledby="countdownStripTitle">
+  <section class="countdown-strip" id="countdownStrip" data-wedding="2026-10-10T13:00:00" aria-labelledby="countdownStripTitle">
     <div class="container">
       <h2 class="countdown-strip__title" id="countdownStripTitle">Faltan</h2>
       <div class="countdown countdown--strip" id="countdown">
@@ -154,7 +154,7 @@
             decoding="async"
           />
           <figcaption class="venue-figure__info">
-            <p class="venue-time">19:30h</p>
+            <p class="venue-time">13:00h</p>
             <p class="venue-place">Parroquia&nbsp;de San&nbsp;Juan&nbsp;Bautista</p>
           </figcaption>
         </figure>
@@ -176,7 +176,7 @@
             decoding="async"
           />
           <figcaption class="venue-figure__info">
-            <p class="venue-time">21:00h</p>
+            <p class="venue-time">14:30h</p>
             <p class="venue-place">Pabellón&nbsp;Municipal el&nbsp;Pilar</p>
           </figcaption>
         </figure>
@@ -191,7 +191,10 @@
   <section class="rsvp" id="confirmacion">
     <div class="container">
       <h2 class="section-title">Confirma tu asistencia</h2>
-      <p class="rsvp-intro">Confírmanos antes del <strong>1 de septiembre de 2026</strong>. Te llevará menos de un minuto y nos ayuda muchísimo a organizarlo todo.</p>
+      <p class="rsvp-intro">
+        Antes del <strong>1 de septiembre de 2026</strong>. Tu respuesta nos ayuda a cuidar cada detalle.
+        Si tienes dudas, <a class="rsvp-intro__link" href="#contacto">llámanos</a>.
+      </p>
     </div>
   </section>
 
@@ -376,7 +379,7 @@
                 <p class="rsvp-stay-note__text">
                   Llamad al
                   <a class="rsvp-stay-note__link" href="tel:+34957140443">957&nbsp;140&nbsp;443</a>
-                  e indicad que sois de la «Boda de Mª&nbsp;Dolores y José&nbsp;Ángel» para el descuento.
+                  e indicad que sois de la «Boda de Mª&nbsp;Dolores y José&nbsp;Ángel».
                   Esa misma semana revisamos la lista por si alguien se despista.
                 </p>
               </div>
@@ -432,19 +435,47 @@
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" id="contacto">
     <div class="cenefa cenefa--hojas" aria-hidden="true"></div>
     <div class="container">
-      <p class="footer-line">Con amor</p>
-      <p class="footer-line footer-line--names">
-        <span class="couple-names-brand">
-          <span class="couple-names-brand__part">José Ángel</span>
-          <span class="couple-names-brand__amp">&amp;</span>
-          <span class="couple-names-brand__part">María Dolores</span>
-        </span>
-      </p>
+      <p class="footer-line footer-line--intro">Si tenéis alguna duda, contactad con nosotros</p>
       <hr class="footer-divider" aria-hidden="true">
-      <p class="footer-line footer-line--date">10 de Octubre de 2026</p>
+      <div class="footer-contacts" role="group" aria-label="Contacto de los novios">
+        <div class="footer-contact footer-contact--left">
+          <p class="footer-contact__name">
+            <span class="footer-contact__name-line">José</span>
+            <span class="footer-contact__name-line">Ángel</span>
+          </p>
+          <a
+            class="footer-contact__phone"
+            href="tel:+34670785448"
+            aria-label="Llamar a José Ángel al +34 670 78 54 48"
+          >
+            <i class="ph-thin ph-phone footer-contact__phone-icon" aria-hidden="true"></i>
+            <span class="footer-contact__phone-text">
+              <span class="footer-contact__phone-cc">+34</span>
+              <span class="footer-contact__phone-num">670&nbsp;78&nbsp;54&nbsp;48</span>
+            </span>
+          </a>
+        </div>
+        <div class="footer-contact footer-contact--right">
+          <p class="footer-contact__name">
+            <span class="footer-contact__name-line">María</span>
+            <span class="footer-contact__name-line">Dolores</span>
+          </p>
+          <a
+            class="footer-contact__phone"
+            href="tel:+34687326344"
+            aria-label="Llamar a María Dolores al +34 687 32 63 44"
+          >
+            <i class="ph-thin ph-phone footer-contact__phone-icon" aria-hidden="true"></i>
+            <span class="footer-contact__phone-text">
+              <span class="footer-contact__phone-cc">+34</span>
+              <span class="footer-contact__phone-num">687&nbsp;32&nbsp;63&nbsp;44</span>
+            </span>
+          </a>
+        </div>
+      </div>
     </div>
   </footer>
 
