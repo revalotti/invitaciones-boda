@@ -2,7 +2,7 @@
  * RSVP — Google Apps Script (Web App)
  *
  * INSTALACIÓN (vinculado a tu hoja de cálculo):
- * 1. Abre la hoja "Asistencia - Boda José Ángel & María Dolores" (o la que uses).
+ * 1. Inicia sesión en Google con invitacionesboda.es@gmail.com y abre la hoja de asistencia.
  * 2. Extensiones → Apps Script.
  * 3. Sustituye TODO el contenido de Code.gs por este archivo.
  * 4. Guarda. Ejecuta una vez doPost o doGet y autoriza permisos (Hojas + Gmail).
@@ -19,10 +19,11 @@
 
 var RSVP_CONFIG = {
   sheetName: '', // vacío = hoja activa del libro
+  senderEmail: 'invitacionesboda.es@gmail.com', // cuenta Google del script (remitente real)
   emailFromName: 'Boda José Ángel & María Dolores',
   emailSubject: 'Copia de tu confirmación — Boda José Ángel & María Dolores',
   weddingDateLabel: '10 de octubre de 2026',
-  replyTo: '' // opcional: correo de contacto de los novios
+  replyTo: 'invitacionesboda.es@gmail.com'
 };
 
 var RSVP_HEADERS = [

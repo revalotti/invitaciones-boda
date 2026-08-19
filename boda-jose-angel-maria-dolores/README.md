@@ -35,13 +35,13 @@ O usa [Google Maps](https://maps.google.com) → Compartir → Incorporar un map
 El formulario envía los datos por `POST` a Google Apps Script, que:
 
 1. **Guarda cada respuesta** en la hoja de cálculo vinculada.
-2. **Envía un correo** al email del invitado con una copia de su confirmación.
+2. **Envía un correo** al email del invitado con una copia de su confirmación (desde **invitacionesboda.es@gmail.com**).
 
 La URL del Web App está en `script.js` → `RSVP_SCRIPT_URL`.
 
 ### Configurar Apps Script (una vez)
 
-1. Abre tu hoja de asistencia en Google Sheets.
+1. Inicia sesión en Google con **invitacionesboda.es@gmail.com** (cuenta que envía las confirmaciones) y abre la hoja de asistencia.
 2. **Extensiones → Apps Script**.
 3. Sustituye todo `Code.gs` por el contenido de `google-apps-script-rsvp.gs`.
 4. Guarda. Ejecuta `doGet` o `doPost` una vez y **autoriza** permisos (Hojas de cálculo y Gmail).

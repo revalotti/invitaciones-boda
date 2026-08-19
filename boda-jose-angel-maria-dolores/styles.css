@@ -2161,7 +2161,7 @@ html.is-letter-locked body {
 }
 
 .faq-question {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 1.1rem;
   font-weight: var(--fw-light);
   color: var(--color-charcoal);
@@ -2515,7 +2515,7 @@ html.is-letter-locked body {
 
 .rsvp-form__block-title,
 .rsvp-form .form-legend {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 500;
   color: var(--color-charcoal);
   letter-spacing: 0.04em;

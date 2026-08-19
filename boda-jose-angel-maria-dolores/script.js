@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Formulario RSVP
-  const RSVP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzh3tjesYe29qF3CvYVSkvH4jkVqjOv91v6kO8ZdxOGGjuV1PoxXBTw2ZaJHtf6r1bT2A/exec';
+  const RSVP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRg1DHzGZ2NBOlvuvxGSxkPlwzGXQczgV_wjwo_iKHqZQeKgtdtAcq8-wfoBttZDdwCA/exec';
 
   const RSVP_MAX_GUESTS = 10;
   const RSVP_GUEST_PLACEHOLDERS = ['Ej. José Ángel García', 'Ej. María Dolores López'];
