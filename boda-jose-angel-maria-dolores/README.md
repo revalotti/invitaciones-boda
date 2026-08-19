@@ -54,11 +54,11 @@ Al abrir la URL `/exec` en el navegador verás un mensaje de estado (`doGet`). E
 
 ### Columnas de la hoja (fila 1)
 
-Pega estas **14 cabeceras** en la fila 1, de la columna A a la N (en este orden):
+Pega estas **15 cabeceras** en la fila 1, de la columna A a la O (en este orden):
 
-| A | B | C | D | E | F | G | H | I | J | K | L | M | N |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `fecha_envio` | `nombre` | `email` | `asistencia` | `asistencia_label` | `tipo_grupo` | `acompanantes` | `ninos` | `total_invitados` | `nombres_acompanantes` | `sin_alergias` | `alergias_seleccionadas` | `cancion` | `mensaje` |
+| A | B | C | D | E | F | G | H | I | J | K | L | M | N | O |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `fecha_envio` | `nombre` | `email` | `asistencia` | `asistencia_label` | `tipo_grupo` | `acompanantes` | `ninos` | `total_invitados` | `nombres_acompanantes` | `sin_alergias` | `alergias_seleccionadas` | `alojamiento` | `cancion` | `mensaje` |
 
 **Qué guarda cada una**
 
@@ -73,6 +73,7 @@ Pega estas **14 cabeceras** en la fila 1, de la columna A a la N (en este orden)
 | `nombres_acompanantes` | Lista de acompañantes (ej. `Ana (adulto); Luis (niño)`) |
 | `sin_alergias` | `Sí` / `No` |
 | `alergias_seleccionadas` | Detalle de alergias o «No tengo ninguna» |
+| `alojamiento` | `Sí` / `No` (vacío si no asiste) |
 | `cancion` / `mensaje` | Opcionales |
 
 Se eliminaron las columnas duplicadas `lista_invitados` (igual que `nombres_acompanantes`) y `alergia` (igual que `alergias_seleccionadas`).
@@ -81,8 +82,8 @@ Se eliminaron las columnas duplicadas `lista_invitados` (igual que `nombres_acom
 
 1. **Hoja nueva o sin datos:** deja la celda **A1 vacía**. Tras pegar el `.gs` actualizado y enviar una confirmación de prueba, el script escribe la fila 1 automáticamente.
 2. **Ya tienes 16 columnas antiguas:** en la fila 1, borra las columnas **`lista_invitados`** y **`alergia`** (o elimina esas dos columnas enteras del libro) y comprueba que el orden coincida con la tabla de arriba. Los datos antiguos en esas columnas eran copia de J y L; no se pierde información útil si J y L ya estaban rellenas.
-3. **Más simple:** crea una pestaña nueva (ej. `Confirmaciones`), pega la fila 1 de la tabla en **A1:N1**, y en `google-apps-script-rsvp.gs` pon `sheetName: 'Confirmaciones'` en `RSVP_CONFIG`.
-4. Tras cambiar el script en Google: **Implementar → Administrar implementaciones → Editar → Nueva versión** (o nueva implementación) para que `doPost` use las 14 columnas.
+3. **Más simple:** crea una pestaña nueva (ej. `Confirmaciones`), deja **A1 vacía**, y en `google-apps-script-rsvp.gs` pon `sheetName: 'Confirmaciones'` en `RSVP_CONFIG`.
+4. Tras cambiar el script en Google: **Implementar → Administrar implementaciones → Editar → Nueva versión** (o nueva implementación) para que `doPost` use las 15 columnas.
 
 ### Borrar datos en la hoja
 

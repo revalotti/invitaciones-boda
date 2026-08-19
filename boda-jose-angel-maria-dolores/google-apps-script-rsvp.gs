@@ -11,10 +11,10 @@
  *    - Acceso: Cualquier persona
  * 6. Copia la URL /exec en script.js → RSVP_SCRIPT_URL
  *
- * CABECERAS DE LA HOJA (fila 1, 14 columnas; se crean solas si A1 está vacía):
+ * CABECERAS DE LA HOJA (fila 1, 15 columnas; se crean/actualizan solas si A1 está vacía o desactualizada):
  * fecha_envio | nombre | email | asistencia | asistencia_label | tipo_grupo |
  * acompanantes | ninos | total_invitados | nombres_acompanantes |
- * sin_alergias | alergias_seleccionadas | cancion | mensaje
+ * sin_alergias | alergias_seleccionadas | alojamiento | cancion | mensaje
  */
 
 var RSVP_CONFIG = {
@@ -39,6 +39,7 @@ var RSVP_HEADERS = [
   'nombres_acompanantes',
   'sin_alergias',
   'alergias_seleccionadas',
+  'alojamiento',
   'cancion',
   'mensaje'
 ];
@@ -111,10 +112,16 @@ function getRsvpSheet() {
 
 function ensureHeaders(sheet) {
   var width = RSVP_HEADERS.length;
-  var firstRow = sheet.getRange(1, 1, 1, width).getValues()[0];
+  var lastCol = Math.max(width, sheet.getLastColumn());
+  var firstRow = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
   var needsHeaders = !firstRow[0] || String(firstRow[0]).trim() === '';
 
-  if (needsHeaders) {
+  var existingHeaders = firstRow.slice(0, width).map(function (cell) {
+    return String(cell || '').trim();
+  });
+  var headersOutdated = existingHeaders.join('|') !== RSVP_HEADERS.join('|');
+
+  if (needsHeaders || headersOutdated) {
     sheet.getRange(1, 1, 1, width).setValues([RSVP_HEADERS]);
     sheet.getRange(1, 1, 1, width).setFontWeight('bold');
     sheet.setFrozenRows(1);
@@ -150,6 +157,9 @@ function sendConfirmationEmail(data) {
   }
   if (data.alergias_seleccionadas) {
     lines.push('— Alergias / intolerancias: ' + data.alergias_seleccionadas);
+  }
+  if (data.alojamiento) {
+    lines.push('— Alojamiento: ' + data.alojamiento);
   }
   if (data.cancion) {
     lines.push('— Canción sugerida: ' + data.cancion);
