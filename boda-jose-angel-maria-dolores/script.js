@@ -349,6 +349,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  function scrollToElement(target, { block = 'start', offset = 0 } = {}) {
+    const reduceMotion = isMotionReduced();
+    const rect = target.getBoundingClientRect();
+    const absoluteTop = window.scrollY + rect.top;
+    let top = absoluteTop;
+
+    if (block === 'end') {
+      top = absoluteTop + rect.height - window.innerHeight;
+    } else if (block === 'center') {
+      top = absoluteTop + rect.height / 2 - window.innerHeight / 2;
+    } else {
+      top = absoluteTop - offset;
+    }
+
+    window.scrollTo({
+      top: Math.max(0, top),
+      behavior: reduceMotion ? 'auto' : 'smooth'
+    });
+  }
+
   function highlightFooterContactPhones() {
     const phones = document.querySelectorAll('#contacto .footer-contact__phone');
     if (!phones.length) return;
@@ -378,11 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const reduceMotion = isMotionReduced();
 
       if (href === '#contacto') {
-        // `end` encaja el footer abajo del viewport; evita el salto de alinear su top arriba
-        target.scrollIntoView({
-          behavior: reduceMotion ? 'auto' : 'smooth',
-          block: 'end'
-        });
+        scrollToElement(target, { block: 'end' });
         window.clearTimeout(contactHighlightTimer);
         contactHighlightTimer = window.setTimeout(
           highlightFooterContactPhones,
@@ -391,10 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      target.scrollIntoView({
-        behavior: reduceMotion ? 'auto' : 'smooth',
-        block: 'start'
-      });
+      const scrollOffset = href === '#historia' ? 8 : 0;
+      scrollToElement(target, { block: 'start', offset: scrollOffset });
     });
   });
 
@@ -408,7 +422,10 @@ document.addEventListener('DOMContentLoaded', () => {
           heroCtaBtn.classList.toggle('hidden', entry.isIntersecting);
         });
       },
-      { threshold: 0.1 }
+      {
+        threshold: 0,
+        rootMargin: '0px 0px -12% 0px'
+      }
     );
     observer.observe(historiaSection);
   }
@@ -630,7 +647,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Reveal on scroll (staggered)
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const revealSelectors = [
-    '.story-section-heading',
     '.countdown-strip__title',
     '#countdown',
     '.venues__intro',
